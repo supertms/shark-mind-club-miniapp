@@ -50,14 +50,15 @@
 .location-content-scroll {
   flex: 1;
   min-height: 0;
-  padding: 48rpx;
-  box-sizing: border-box;
+  width: 100%;
 }
 
 .location-content-wrapper {
   display: flex;
   flex-direction: column;
   gap: 48rpx;
+  padding: 48rpx;
+  box-sizing: border-box;
 }
 
 /* 联系方式和地址卡片 */

@@ -59,9 +59,9 @@ Component({
       query.exec((res) => {
         if (res[0]) {
           const headerHeight = res[0].height;
-          // 模态框高度是 90vh，减去头部高度和 padding
-          const modalPadding = 64; // 32rpx * 2
-          const availableHeight = screenHeight * 0.9 - headerHeight - modalPadding;
+          // 模态框高度是 90vh，减去头部高度
+          const modalHeight = screenHeight * 0.9;
+          const availableHeight = modalHeight - headerHeight;
           const scrollHeight = Math.max(availableHeight * 2, 600); // 转换为rpx，至少600rpx
           
           this.setData({
