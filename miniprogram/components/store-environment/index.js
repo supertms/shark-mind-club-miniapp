@@ -13,16 +13,16 @@ Component({
   data: {
     currentIndex: 0,
     storeImages: [
-      { url: '/assets/store1.png', title: '德州扑克专业牌桌' },
+      { url: '/assets/store1.webp', title: '德州扑克专业牌桌' },
       { url: '/assets/store2.png', title: 'Shark Mind Logo墙' },
-      { url: '/assets/store3.png', title: '店内欢乐氛围' },
-      { url: '/assets/store4.png', title: '金色水晶灯与鸡尾酒' },
-      { url: '/assets/store5.png', title: 'Shark Mind品牌周边' },
-      { url: '/assets/store6.png', title: '精选特调饮品' },
-      { url: '/assets/store7.png', title: '扑克牌桌氛围' },
-      { url: '/assets/store8.png', title: '品牌钥匙扣展示' },
-      { url: '/assets/store9.png', title: 'Shark Mind钥匙扣' },
-      { url: '/assets/store10.png', title: '店内灯光氛围' }
+      { url: '/assets/store3.webp', title: '店内欢乐氛围' },
+      { url: '/assets/store4.webp', title: '金色水晶灯与鸡尾酒' },
+      { url: '/assets/store5.webp', title: 'Shark Mind品牌周边' },
+      { url: '/assets/store6.webp', title: '精选特调饮品' },
+      { url: '/assets/store7.webp', title: '扑克牌桌氛围' },
+      { url: '/assets/store8.webp', title: '品牌钥匙扣展示' },
+      { url: '/assets/store9.webp', title: 'Shark Mind钥匙扣' },
+      { url: '/assets/store10.webp', title: '店内灯光氛围' }
     ]
   },
 

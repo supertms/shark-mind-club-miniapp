@@ -58,7 +58,7 @@
         <!-- Step 1 -->
         <view class="parking-guide-step-card">
           <view class="parking-guide-image-container">
-            <image class="parking-guide-image" src="../../assets/parking1.png" mode="aspectFit" />
+            <image class="parking-guide-image" src="../../assets/parking1.webp" mode="aspectFit" />
           </view>
           <view class="parking-guide-step-content">
             <view class="parking-step-badge-wrapper">
@@ -71,7 +71,7 @@
         <!-- Step 2 -->
         <view class="parking-guide-step-card">
           <view class="parking-guide-image-container">
-            <image class="parking-guide-image" src="../../assets/parking2.png" mode="aspectFit" />
+            <image class="parking-guide-image" src="../../assets/parking2.webp" mode="aspectFit" />
           </view>
           <view class="parking-guide-step-content">
             <view class="parking-step-badge-wrapper">
@@ -84,7 +84,7 @@
         <!-- Step 3 -->
         <view class="parking-guide-step-card">
           <view class="parking-guide-image-container">
-            <image class="parking-guide-image" src="../../assets/parking3.png" mode="aspectFit" />
+            <image class="parking-guide-image" src="../../assets/parking3.webp" mode="aspectFit" />
           </view>
           <view class="parking-guide-step-content">
             <view class="parking-step-badge-wrapper">

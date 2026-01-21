@@ -76,7 +76,7 @@
         <!-- Step 1 -->
         <view class="guide-step-card">
           <view class="guide-image-container">
-            <image class="guide-image" src="../../assets/guide1.png" mode="aspectFit" />
+            <image class="guide-image" src="../../assets/guide1.webp" mode="aspectFit" />
           </view>
           <view class="guide-step-content">
             <view class="step-badge-wrapper">
@@ -89,7 +89,7 @@
         <!-- Step 2 -->
         <view class="guide-step-card">
           <view class="guide-image-container">
-            <image class="guide-image" src="../../assets/guide2.png" mode="aspectFit" />
+            <image class="guide-image" src="../../assets/guide2.webp" mode="aspectFit" />
           </view>
           <view class="guide-step-content">
             <view class="step-badge-wrapper">
@@ -102,7 +102,7 @@
         <!-- Step 3 -->
         <view class="guide-step-card">
           <view class="guide-image-container">
-            <image class="guide-image" src="../../assets/guide3.png" mode="aspectFit" />
+            <image class="guide-image" src="../../assets/guide3.webp" mode="aspectFit" />
           </view>
           <view class="guide-step-content">
             <view class="step-badge-wrapper">
@@ -115,7 +115,7 @@
         <!-- Step 4 -->
         <view class="guide-step-card">
           <view class="guide-image-container">
-            <image class="guide-image" src="../../assets/guide4.png" mode="aspectFit" />
+            <image class="guide-image" src="../../assets/guide4.webp" mode="aspectFit" />
           </view>
           <view class="guide-step-content">
             <view class="step-badge-wrapper">

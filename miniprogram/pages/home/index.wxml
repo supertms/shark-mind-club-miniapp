@@ -5,7 +5,7 @@
     <view class="welcome-section">
       <!-- Logo and Welcome -->
       <view class="logo-section">
-        <image class="logo" src="/assets/logo.png" mode="aspectFit" />
+        <image class="logo" src="/assets/logo.webp" mode="aspectFit" />
         <text class="welcome-text">欢迎加入 鲨曼 Shark Mind Club</text>
         <view class="divider"></view>
         <text class="description">

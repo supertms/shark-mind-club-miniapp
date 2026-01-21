@@ -31,6 +31,12 @@ miniprogram/.tea/
 *.temp
 .cache/
 
+# Python scripts (temporary)
+compress_images.py
+compress_images_aggressive.py
+convert_to_webp.py
+check_image_sizes.py
+
 # OS files
 Thumbs.db
 .DS_Store
