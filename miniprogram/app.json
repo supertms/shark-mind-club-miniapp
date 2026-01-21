@@ -7,6 +7,7 @@
     "pages/pickup/index",
     "pages/location-guide/index"
   ],
+  "lazyCodeLoading": "requiredComponents",
   "window": {
     "backgroundTextStyle": "light",
     "navigationBarBackgroundColor": "#000000",
