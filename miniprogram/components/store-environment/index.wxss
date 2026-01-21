@@ -1,0 +1,203 @@
+/* components/store-environment/index.wxss */
+.store-environment-container {
+  width: 100%;
+  height: 100vh;
+  background-color: #000000;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Title & Close Button */
+.store-title-section {
+  position: absolute;
+  top: 48rpx;
+  left: 48rpx;
+  z-index: 20;
+}
+
+.store-title-main {
+  color: #ffffff;
+  font-size: 48rpx;
+  font-weight: bold;
+  display: block;
+  margin-bottom: 8rpx;
+}
+
+.store-title-sub {
+  color: #9ca3af;
+  font-size: 28rpx;
+  display: block;
+  margin-bottom: 24rpx;
+}
+
+.store-close-btn {
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+  padding: 16rpx 32rpx;
+  background-color: rgba(0, 0, 0, 0.7);
+  border: 2rpx solid #FFED00;
+  border-radius: 16rpx;
+  width: fit-content;
+}
+
+.store-close-btn:active {
+  background-color: rgba(255, 237, 0, 0.1);
+}
+
+.store-close-icon {
+  color: #FFED00;
+  font-size: 32rpx;
+}
+
+.store-close-text {
+  color: #FFED00;
+  font-size: 28rpx;
+  font-weight: 500;
+}
+
+/* Counter */
+.store-counter {
+  position: absolute;
+  top: 48rpx;
+  right: 48rpx;
+  z-index: 20;
+  background-color: rgba(0, 0, 0, 0.7);
+  padding: 16rpx 32rpx;
+  border-radius: 50rpx;
+  border: 2rpx solid #374151;
+  display: flex;
+  align-items: center;
+}
+
+.store-counter-current {
+  color: #FFED00;
+  font-size: 32rpx;
+  font-weight: bold;
+}
+
+.store-counter-separator {
+  color: #9ca3af;
+  font-size: 28rpx;
+  margin: 0 8rpx;
+}
+
+.store-counter-total {
+  color: #9ca3af;
+  font-size: 28rpx;
+}
+
+/* Main Image Display */
+.store-image-display {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  padding: 48rpx;
+  box-sizing: border-box;
+}
+
+/* Background Blur Effect */
+.store-bg-blur {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  height: 100%;
+  filter: blur(60rpx);
+  opacity: 0.3;
+  z-index: 1;
+  transform: scale(1.1);
+}
+
+/* Main Image Container */
+.store-image-container {
+  position: relative;
+  width: 100%;
+  max-width: 650rpx;
+  height: calc(100vh - 300rpx);
+  border-radius: 32rpx;
+  overflow: hidden;
+  box-shadow: 0 0 40rpx rgba(0, 0, 0, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(0, 0, 0, 0.3);
+  z-index: 2;
+}
+
+.store-main-image {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: contain;
+}
+
+/* Arrow Buttons */
+.store-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 96rpx;
+  height: 96rpx;
+  background-color: rgba(0, 0, 0, 0.7);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2rpx solid rgba(255, 255, 255, 0.2);
+  z-index: 10;
+}
+
+.store-arrow:active {
+  background-color: rgba(0, 0, 0, 0.7);
+}
+
+.store-arrow-left {
+  left: 32rpx;
+}
+
+.store-arrow-right {
+  right: 32rpx;
+}
+
+.store-arrow-icon {
+  color: #ffffff;
+  font-size: 48rpx;
+  font-weight: bold;
+  line-height: 1;
+}
+
+/* Dot Indicators */
+.store-dots {
+  position: absolute;
+  bottom: 80rpx;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 16rpx;
+  z-index: 20;
+}
+
+.store-dot {
+  width: 16rpx;
+  height: 16rpx;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.3);
+  transition: all 0.3s ease;
+}
+
+.store-dot:active {
+  background-color: rgba(255, 255, 255, 0.5);
+}
+
+.store-dot-active {
+  width: 64rpx;
+  height: 16rpx;
+  border-radius: 8rpx;
+  background-color: #FFED00;
+}

@@ -1,0 +1,273 @@
+/* pages/location-guide/index.wxss */
+@import "../../styles/common.wxss";
+
+/* 主容器 */
+.container {
+  height: 100vh;
+  background-color: #1a1a1a;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* 头部 */
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 48rpx;
+  padding-top: calc(48rpx + env(safe-area-inset-top));
+  border-bottom: 2rpx solid #374151;
+  flex-shrink: 0;
+  background-color: #1a1a1a;
+}
+
+.title-section {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.title-main {
+  color: #ffffff;
+  font-size: 40rpx;
+  font-weight: bold;
+}
+
+.title-sub {
+  color: #9ca3af;
+  font-size: 28rpx;
+  margin-top: 8rpx;
+}
+
+.close-btn {
+  color: #9ca3af;
+  font-size: 48rpx;
+  padding: 8rpx;
+}
+
+.close-btn:active {
+  color: #ffffff;
+}
+
+/* 内容滚动区域 */
+.content-scroll {
+  flex: 1;
+  min-height: 0;
+  padding: 48rpx;
+}
+
+.content-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 48rpx;
+}
+
+/* 联系方式和地址卡片 */
+.contact-info-card {
+  background-color: #2a2a2a;
+  border-radius: 24rpx;
+  padding: 40rpx;
+  border: 2rpx solid #374151;
+  display: flex;
+  flex-direction: column;
+  gap: 32rpx;
+}
+
+.contact-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 24rpx;
+}
+
+.contact-icon-large {
+  font-size: 48rpx;
+  flex-shrink: 0;
+}
+
+.contact-content-wrapper {
+  flex: 1;
+}
+
+.contact-label-text {
+  color: #9ca3af;
+  font-size: 28rpx;
+  margin-bottom: 8rpx;
+  display: block;
+}
+
+.contact-value-text {
+  color: #ffffff;
+  font-size: 32rpx;
+  font-weight: 500;
+}
+
+/* 电话卡片 */
+.phone-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 16rpx;
+}
+
+.phone-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #1a1a1a;
+  border: 2rpx solid #374151;
+  border-radius: 16rpx;
+  padding: 24rpx;
+  transition: all 0.2s ease;
+}
+
+.phone-card:active {
+  background-color: #000000;
+  border-color: #4b5563;
+}
+
+.phone-number-text {
+  color: #ffffff;
+  font-size: 36rpx;
+  font-weight: 500;
+  letter-spacing: 2rpx;
+}
+
+.phone-icon-yellow {
+  font-size: 32rpx;
+  color: #FFED00;
+}
+
+/* 重要提示卡片 */
+.important-notes-card {
+  background: linear-gradient(135deg, rgba(255, 237, 0, 0.1), rgba(255, 237, 0, 0.05));
+  border: 2rpx solid rgba(255, 237, 0, 0.2);
+  border-radius: 24rpx;
+  padding: 40rpx;
+  display: flex;
+  flex-direction: column;
+  gap: 24rpx;
+}
+
+.note-row {
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+}
+
+.note-row-last {
+  align-items: flex-start;
+}
+
+.note-dot {
+  width: 12rpx;
+  height: 12rpx;
+  background-color: #FFED00;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.note-row-last .note-dot {
+  margin-top: 12rpx;
+}
+
+.note-text-white {
+  color: #ffffff;
+  font-size: 28rpx;
+  flex: 1;
+  line-height: 1.6;
+}
+
+.note-with-icon {
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+  flex: 1;
+}
+
+.note-icon-large {
+  font-size: 48rpx;
+}
+
+/* 路线指引区域 */
+.guide-images-section {
+  display: flex;
+  flex-direction: column;
+  gap: 32rpx;
+}
+
+.guide-section-title {
+  color: #ffffff;
+  font-size: 36rpx;
+  font-weight: bold;
+}
+
+/* 指引步骤卡片 */
+.guide-step-card {
+  background-color: #2a2a2a;
+  border-radius: 24rpx;
+  overflow: hidden;
+}
+
+.guide-image-container {
+  width: 100%;
+  background-color: #000000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 32rpx;
+  min-height: 200rpx;
+}
+
+.guide-image {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.guide-step-content {
+  padding: 32rpx;
+}
+
+.step-badge-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+  margin-bottom: 16rpx;
+}
+
+.step-badge {
+  background-color: #FFED00;
+  color: #000000;
+  font-size: 24rpx;
+  font-weight: bold;
+  padding: 8rpx 16rpx;
+  border-radius: 8rpx;
+  display: inline-block;
+}
+
+.step-description {
+  color: #ffffff;
+  font-size: 28rpx;
+  font-weight: 500;
+  line-height: 1.6;
+}
+
+/* 响应式调整 */
+@media (max-width: 750rpx) {
+  .header {
+    padding: 32rpx 24rpx;
+  }
+
+  .content-scroll {
+    padding: 32rpx 24rpx;
+  }
+
+  .contact-info-card,
+  .important-notes-card {
+    padding: 32rpx;
+  }
+
+  .guide-step-content {
+    padding: 24rpx;
+  }
+}

@@ -1,0 +1,171 @@
+<view class="container">
+  <!-- 头部 -->
+  <view class="header">
+    <text class="header-title">点餐</text>
+    <text class="header-close" bindtap="onBack">✕</text>
+  </view>
+
+  <!-- 主内容 -->
+  <view class="main-content">
+    <!-- 分类侧边栏 -->
+    <view class="category-sidebar">
+      <view
+        wx:for="{{categories}}"
+        wx:key="id"
+        class="category-item {{selectedCategory === item.id ? 'active' : ''}}"
+        bindtap="onCategoryChange"
+        data-category="{{item.id}}"
+      >
+        <text class="category-icon">
+          {{item.icon === 'gift' ? '🎁' : item.icon === 'cookie' ? '🍪' : item.icon === 'beer' ? '🍺' : item.icon === 'wine' ? '🍷' : item.icon === 'cup-soda' ? '🥤' : item.icon === 'clock' ? '⏰' : '📦'}}
+        </text>
+        <text class="category-name">{{item.name}}</text>
+      </view>
+    </view>
+
+    <!-- 商品列表区域 -->
+    <view class="products-area">
+      <!-- 进行中订单 -->
+      <view wx:if="{{selectedCategory === 'ongoing-orders'}}" class="orders-list">
+        <view
+          wx:for="{{ongoingOrders}}"
+          wx:key="id"
+          class="order-card"
+        >
+          <view class="order-header">
+            <view class="order-time-info">
+              <text class="order-time-label">订单时间</text>
+              <text class="order-time">{{item.orderTime}}</text>
+            </view>
+            <view class="order-status">进行中</view>
+          </view>
+
+          <view class="order-items">
+            <view
+              wx:for="{{item.items}}"
+              wx:for-item="orderItem"
+              wx:key="index"
+              class="order-item-row"
+            >
+              <text class="order-item-name">
+                {{orderItem.product.name}}
+                <text wx:if="{{orderItem.variant}}" class="order-item-variant">({{orderItem.variant}})</text>
+                <text class="order-item-quantity">x{{orderItem.quantity}}</text>
+              </text>
+              <text class="order-item-price">¥{{orderItem.formattedPrice}}</text>
+            </view>
+          </view>
+
+          <view class="order-total">
+            <text class="order-total-label">订单总计</text>
+            <text class="order-total-price">¥{{item.formattedTotal}}</text>
+          </view>
+        </view>
+
+        <view wx:if="{{ongoingOrders.length === 0}}" class="empty-orders">
+          <text class="empty-text">暂无进行中的订单</text>
+        </view>
+      </view>
+
+      <!-- 商品列表 -->
+      <scroll-view wx:else class="products-list" scroll-y="true">
+        <view
+          wx:for="{{filteredProducts}}"
+          wx:key="id"
+          class="product-card {{selectedCategory === 'general-package' ? 'package-card' : ''}}"
+        >
+          <!-- 商品图片 -->
+          <view class="product-image {{selectedCategory === 'general-package' ? 'package-image' : ''}}">
+            <image src="{{item.image}}" mode="aspectFill" />
+            <view class="image-overlay"></view>
+          </view>
+
+          <!-- 商品信息 -->
+          <view class="product-info">
+            <view class="product-header">
+              <text class="product-name {{selectedCategory === 'general-package' ? 'package-name' : ''}}">{{item.name}}</text>
+              <text wx:if="{{item.description}}" class="product-description {{selectedCategory === 'general-package' ? 'package-description' : ''}}">{{item.description}}</text>
+            </view>
+
+            <!-- 价格和控制按钮 -->
+            <view class="product-controls">
+              <text class="product-price {{selectedCategory === 'general-package' ? 'package-price' : ''}}">¥{{item.formattedPrice}}</text>
+
+              <!-- 添加/移除按钮 -->
+              <view wx:if="{{item.quantity > 0}}" class="quantity-controls">
+                <button
+                  class="quantity-btn minus"
+                  bindtap="onRemoveFromCart"
+                  data-product-id="{{item.id}}"
+                >
+                  <text>−</text>
+                </button>
+                <text class="quantity-text">{{item.quantity}}</text>
+                <button
+                  class="quantity-btn plus"
+                  bindtap="onAddToCart"
+                  data-product-id="{{item.id}}"
+                >
+                  <text>+</text>
+                </button>
+              </view>
+              <button
+                wx:else
+                class="add-btn {{selectedCategory === 'general-package' ? 'package-add-btn' : ''}}"
+                bindtap="onAddToCart"
+                data-product-id="{{item.id}}"
+              >
+                <text wx:if="{{selectedCategory === 'general-package'}}">添加</text>
+                <text wx:else>+</text>
+              </button>
+            </view>
+          </view>
+        </view>
+
+        <view wx:if="{{filteredProducts.length === 0}}" class="empty-products">
+          <text class="empty-text">该分类暂无商品</text>
+        </view>
+      </scroll-view>
+    </view>
+  </view>
+
+  <!-- 底部购物车栏 -->
+  <view wx:if="{{selectedCategory !== 'ongoing-orders' && cartCount > 0}}" class="cart-bar">
+    <view class="cart-summary">
+      <view class="cart-total-info">
+        <text class="cart-label">合计</text>
+        <text class="cart-total">¥{{formattedCartTotal}}</text>
+      </view>
+      <text class="cart-count">共{{cartCount}}件商品</text>
+    </view>
+    <button class="checkout-btn" bindtap="onShowCheckoutModal">结算</button>
+  </view>
+
+  <!-- 结算确认模态框 -->
+  <view wx:if="{{showCheckoutModal}}" class="modal-overlay" bindtap="onCloseCheckoutModal">
+    <view class="modal-content checkout-modal" catchtap="">
+      <view class="modal-header">
+        <text class="modal-title">确认订单</text>
+        <text class="modal-close" bindtap="onCloseCheckoutModal">✕</text>
+      </view>
+      <view class="modal-body">
+          <view class="checkout-items">
+            <view
+              wx:for="{{cart}}"
+              wx:key="index"
+              class="checkout-item"
+            >
+              <text class="checkout-item-name">{{item.product.name}}</text>
+              <text class="checkout-item-quantity">x{{item.quantity}}</text>
+              <text class="checkout-item-price">¥{{item.formattedPrice}}</text>
+            </view>
+          </view>
+          <view class="checkout-total">
+            <text class="checkout-total-label">总计</text>
+            <text class="checkout-total-price">¥{{formattedCartTotal}}</text>
+          </view>
+        <button class="confirm-btn" bindtap="onConfirmOrder">确认下单</button>
+      </view>
+    </view>
+  </view>
+</view>

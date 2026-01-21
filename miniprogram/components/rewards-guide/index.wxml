@@ -1,0 +1,159 @@
+<!--components/rewards-guide/index.wxml-->
+<view class="rewards-guide-content">
+  <!-- Header -->
+  <view class="rewards-header">
+    <text class="rewards-title">奖励说明</text>
+    <text class="rewards-close-btn" bindtap="onClose">✕</text>
+  </view>
+
+  <!-- Content -->
+  <scroll-view class="rewards-content-scroll" scroll-y="true" enable-back-to-top="true" scroll-with-animation="true" show-scrollbar="true" enhanced="true" enable-flex="true" style="height: {{scrollHeight}}rpx">
+    <view class="rewards-content-wrapper">
+      <!-- 周榜和月榜奖励 -->
+      <view class="rewards-card rewards-card-yellow">
+        <view class="rewards-card-header">
+          <text class="rewards-card-icon">🏆</text>
+          <text class="rewards-card-title">周榜 & 月榜荣耀奖励</text>
+        </view>
+        
+        <view class="rewards-list">
+          <view class="rewards-item">
+            <view class="rewards-rank-badge rewards-rank-1">
+              <text class="rewards-rank-number">1</text>
+            </view>
+            <view class="rewards-item-content">
+              <text class="rewards-item-title">冠军奖励</text>
+              <text class="rewards-item-desc">定制冠军奖杯 + 限量版卫衣</text>
+            </view>
+          </view>
+
+          <view class="rewards-item">
+            <view class="rewards-rank-badge rewards-rank-2">
+              <text class="rewards-rank-number">2</text>
+            </view>
+            <view class="rewards-item-content">
+              <text class="rewards-item-title">亚军奖励</text>
+              <text class="rewards-item-desc">定制亚军奖杯 + 纪念卫衣</text>
+            </view>
+          </view>
+
+          <view class="rewards-item">
+            <view class="rewards-rank-badge rewards-rank-3">
+              <text class="rewards-rank-number">3</text>
+            </view>
+            <view class="rewards-item-content">
+              <text class="rewards-item-title">季军奖励</text>
+              <text class="rewards-item-desc">定制季军奖杯 + 精美礼品</text>
+            </view>
+          </view>
+        </view>
+
+        <view class="rewards-card-footer">
+          <text class="rewards-card-tip">💡 前三名玩家将获得专属荣耀奖励，包括定制奖杯、卫衣等精美纪念品</text>
+        </view>
+      </view>
+
+      <!-- 月赛奖励 -->
+      <view class="rewards-card rewards-card-blue">
+        <view class="rewards-card-header">
+          <text class="rewards-card-icon">🎁</text>
+          <text class="rewards-card-title rewards-card-title-blue">月赛精彩礼品</text>
+        </view>
+        
+        <view class="rewards-list">
+          <view class="rewards-item">
+            <text class="rewards-item-icon">🏅</text>
+            <view class="rewards-item-content">
+              <text class="rewards-item-title">定制奖杯</text>
+              <text class="rewards-item-desc">专属刻名，永久纪念</text>
+            </view>
+          </view>
+
+          <view class="rewards-item">
+            <text class="rewards-item-icon">🍷</text>
+            <view class="rewards-item-content">
+              <text class="rewards-item-title">高品质酒水</text>
+              <text class="rewards-item-desc">精选美酒，品味人生</text>
+            </view>
+          </view>
+
+          <view class="rewards-item">
+            <text class="rewards-item-icon">🎀</text>
+            <view class="rewards-item-content">
+              <text class="rewards-item-title">实用小礼品</text>
+              <text class="rewards-item-desc">精心挑选，惊喜连连</text>
+            </view>
+          </view>
+        </view>
+
+        <view class="rewards-card-footer">
+          <text class="rewards-card-tip">💡 月赛奖励丰富多样，让每一次参赛都充满期待</text>
+        </view>
+      </view>
+
+      <!-- 重要提醒 -->
+      <view class="rewards-card rewards-card-red">
+        <view class="rewards-card-header">
+          <text class="rewards-card-icon">⚠️</text>
+          <text class="rewards-card-title rewards-card-title-red">重要提醒</text>
+        </view>
+        
+        <view class="rewards-warning-list">
+          <view class="rewards-warning-item">
+            <text class="rewards-warning-dot">•</text>
+            <text class="rewards-warning-text">所有奖励均为<text class="rewards-highlight-yellow">无价值荣誉奖励</text></text>
+          </view>
+
+          <view class="rewards-warning-item">
+            <text class="rewards-warning-dot">•</text>
+            <text class="rewards-warning-text"><text class="rewards-highlight-red">禁止转赠、转售、折现</text></text>
+          </view>
+
+          <view class="rewards-warning-item">
+            <text class="rewards-warning-dot">•</text>
+            <text class="rewards-warning-text">仅限获奖者<text class="rewards-highlight-yellow">本人领取</text></text>
+          </view>
+
+          <view class="rewards-warning-item">
+            <text class="rewards-warning-dot">•</text>
+            <text class="rewards-warning-text">需出示身份证明及获奖记录</text>
+          </view>
+        </view>
+
+        <view class="rewards-card-footer rewards-card-footer-red">
+          <text class="rewards-card-tip">🎯 我们坚持绿色竞技理念，所有奖励仅作为荣誉象征，不具备任何经济价值。违规转让者将被取消获奖资格并列入黑名单。</text>
+        </view>
+      </view>
+
+      <!-- 领奖流程 -->
+      <view class="rewards-card rewards-card-default">
+        <view class="rewards-card-header">
+          <text class="rewards-card-icon">📋</text>
+          <text class="rewards-card-title">领奖流程</text>
+        </view>
+        
+        <view class="rewards-process-list">
+          <view class="rewards-process-item">
+            <view class="rewards-process-number">1</view>
+            <text class="rewards-process-text">榜单结算后，工作人员将主动联系获奖者</text>
+          </view>
+
+          <view class="rewards-process-item">
+            <view class="rewards-process-number">2</view>
+            <text class="rewards-process-text">获奖者需出示身份证明及app内获奖记录</text>
+          </view>
+
+          <view class="rewards-process-item">
+            <view class="rewards-process-number">3</view>
+            <text class="rewards-process-text">核实无误后，现场领取奖励</text>
+          </view>
+
+          <view class="rewards-process-item">
+            <view class="rewards-process-number">4</view>
+            <text class="rewards-process-text">签字确认，完成领奖</text>
+          </view>
+        </view>
+      </view>
+    </view>
+  </scroll-view>
+</view>

@@ -1,0 +1,820 @@
+/* pages/home/index.wxss */
+@import "../../styles/common.wxss";
+
+/* 主容器 */
+.container {
+  height: 100vh;
+  width: 100%;
+  background-color: #000000;
+  color: #ffffff;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+/* 主内容区域 */
+.main-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  padding: 0 32rpx;
+  padding-top: 60rpx;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* 欢迎区域 */
+.welcome-section {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.logo-section {
+  text-align: center;
+  flex-shrink: 0;
+  margin-bottom: 24rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.logo {
+  width: 160rpx;
+  height: 160rpx;
+  margin-bottom: 16rpx;
+  display: block;
+  filter: invert(1) sepia(1) saturate(5) hue-rotate(0deg) brightness(1.2);
+}
+
+.welcome-text {
+  color: #9ca3af;
+  font-size: 28rpx;
+  margin-bottom: 16rpx;
+}
+
+.divider {
+  background: linear-gradient(to right, transparent, #374151, transparent);
+  height: 2rpx;
+  width: 100%;
+  margin-bottom: 16rpx;
+}
+
+.description {
+  color: #6b7280;
+  font-size: 24rpx;
+  line-height: 1.6;
+  padding: 0;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* 操作卡片区域 */
+.action-cards {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 24rpx;
+  overflow-y: auto;
+  min-height: 0;
+  padding-bottom: 32rpx;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* 扫码卡片 */
+.scan-card {
+  width: 100%;
+  max-width: 100%;
+  background: linear-gradient(135deg, rgba(255, 237, 0, 0.2), rgba(255, 237, 0, 0.1));
+  border: 4rpx solid #FFED00;
+  border-radius: 24rpx;
+  padding: 40rpx;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-shrink: 0;
+  transition: all 0.2s ease;
+  box-sizing: border-box;
+}
+
+.scan-card:active {
+  background: linear-gradient(135deg, rgba(255, 237, 0, 0.3), rgba(255, 237, 0, 0.2));
+}
+
+.scan-content {
+  display: flex;
+  align-items: center;
+  gap: 24rpx;
+}
+
+.scan-icon {
+  font-size: 48rpx;
+}
+
+.scan-info {
+  text-align: left;
+}
+
+.scan-title {
+  color: #FFED00;
+  font-size: 28rpx;
+  font-weight: bold;
+  margin-bottom: 8rpx;
+  display: block;
+}
+
+.scan-subtitle {
+  color: #9ca3af;
+  font-size: 24rpx;
+}
+
+.arrow {
+  color: #FFED00;
+  font-size: 32rpx;
+}
+
+/* 活动卡片 */
+.events-card {
+  width: 100%;
+  max-width: 100%;
+  background: linear-gradient(135deg, #2a2a2a, #1a1a1a);
+  border-radius: 32rpx;
+  overflow: hidden;
+  text-align: left;
+  flex-shrink: 0;
+  transition: all 0.2s ease;
+  box-sizing: border-box;
+}
+
+.events-card:active {
+  background: linear-gradient(135deg, #333333, #222222);
+}
+
+.card-header {
+  padding: 40rpx;
+  padding-bottom: 16rpx;
+}
+
+.card-title {
+  color: #FF6B9D;
+  font-size: 48rpx;
+  font-weight: bold;
+  margin-bottom: 8rpx;
+  display: block;
+}
+
+.card-subtitle {
+  color: #9ca3af;
+  font-size: 28rpx;
+}
+
+.events-preview {
+  padding: 0 40rpx 40rpx 40rpx;
+}
+
+.events-scroll {
+  white-space: nowrap;
+  width: 100%;
+}
+
+.events-list {
+  display: flex;
+  gap: 24rpx;
+  padding: 0;
+}
+
+.event-item {
+  flex-shrink: 0;
+  width: 288rpx;
+}
+
+.event-image {
+  width: 100%;
+  height: 192rpx;
+  border-radius: 16rpx;
+  margin-bottom: 12rpx;
+  position: relative;
+  overflow: hidden;
+}
+
+.event-image::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 80rpx;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.6), transparent);
+}
+
+.event-tag {
+  position: absolute;
+  top: 16rpx;
+  right: 16rpx;
+  padding: 8rpx 16rpx;
+  border-radius: 20rpx;
+  font-size: 20rpx;
+  font-weight: 500;
+  color: #000000;
+}
+
+.tag-featured {
+  background-color: #FFED00;
+}
+
+.tag-tomorrow {
+  background-color: #3b82f6;
+  color: #ffffff;
+}
+
+.tag-ongoing {
+  background-color: #22c55e;
+  color: #ffffff;
+}
+
+.event-title {
+  color: #ffffff;
+  font-size: 24rpx;
+  font-weight: 500;
+  line-height: 1.4;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+}
+
+/* 快速功能 */
+.quick-features {
+  display: flex;
+  flex-direction: column;
+  gap: 24rpx;
+  flex-shrink: 0;
+  padding-bottom: 32rpx;
+}
+
+.feature-item {
+  width: 100%;
+  max-width: 100%;
+  background-color: #2a2a2a;
+  border-radius: 24rpx;
+  padding: 40rpx;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  transition: all 0.2s ease;
+  position: relative;
+  box-sizing: border-box;
+}
+
+.feature-item:active {
+  background-color: #333333;
+}
+
+.location-guide {
+  position: relative;
+}
+
+.new-badge {
+  position: absolute;
+  top: -12rpx;
+  right: 16rpx;
+  background: linear-gradient(135deg, #FF6B9D, #FF4B7C);
+  color: #ffffff;
+  font-size: 20rpx;
+  padding: 6rpx 16rpx;
+  border-radius: 20rpx;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  gap: 4rpx;
+  z-index: 10;
+  animation: pulse 2s infinite;
+}
+
+.feature-icon {
+  font-size: 48rpx;
+}
+
+.feature-info {
+  flex: 1;
+  text-align: left;
+  margin-left: 24rpx;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.feature-title {
+  color: #ffffff;
+  font-size: 28rpx;
+  font-weight: 500;
+  margin-bottom: 8rpx;
+  display: block;
+}
+
+.feature-subtitle {
+  color: #6b7280;
+  font-size: 24rpx;
+}
+
+.feature-arrow {
+  color: #4b5563;
+  font-size: 32rpx;
+  flex-shrink: 0;
+  margin-left: 16rpx;
+}
+
+/* 本周最受关注选手卡片 */
+.top-player-card {
+  width: 100%;
+  background: linear-gradient(135deg, #2a2a2a, #1a1a1a);
+  border-radius: 24rpx;
+  padding: 40rpx;
+  border: 2rpx solid rgba(255, 237, 0, 0.3);
+  transition: all 0.2s ease;
+}
+
+.top-player-card:active {
+  background: linear-gradient(135deg, #333333, #222222);
+}
+
+.top-player-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24rpx;
+}
+
+.top-player-title {
+  color: #FFED00;
+  font-size: 28rpx;
+  font-weight: bold;
+}
+
+.top-player-arrow {
+  color: #4b5563;
+}
+
+.top-player-content {
+  display: flex;
+  align-items: center;
+  gap: 24rpx;
+}
+
+.player-avatar {
+  width: 96rpx;
+  height: 96rpx;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #eab308, #f97316);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  ring: 4rpx solid rgba(255, 237, 0, 0.5);
+}
+
+.avatar-text {
+  color: #ffffff;
+  font-size: 36rpx;
+  font-weight: bold;
+}
+
+.player-info {
+  flex: 1;
+  text-align: left;
+}
+
+.player-name {
+  color: #ffffff;
+  font-size: 32rpx;
+  font-weight: 500;
+  margin-bottom: 8rpx;
+  display: block;
+}
+
+.player-stats {
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+}
+
+.stat-badge {
+  background-color: #2a2a2a;
+  border: 2rpx solid rgba(255, 237, 0, 0.3);
+  border-radius: 8rpx;
+  padding: 4rpx 12rpx;
+  display: flex;
+  align-items: center;
+  gap: 8rpx;
+}
+
+.stat-type {
+  color: #d1d5db;
+  font-size: 24rpx;
+}
+
+.stat-count {
+  color: #FFED00;
+  font-size: 24rpx;
+  font-weight: bold;
+}
+
+.total-likes {
+  color: #9ca3af;
+  font-size: 24rpx;
+}
+
+
+/* 模态框样式 */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.7);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-content {
+  background-color: #1a1a1a;
+  border-radius: 32rpx;
+  max-width: 90%;
+  max-height: 80%;
+  overflow: hidden;
+  position: relative;
+  width: 600rpx;
+}
+
+.modal-header {
+  padding: 32rpx 40rpx;
+  border-bottom: 2rpx solid #374151;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.modal-title {
+  color: #ffffff;
+  font-size: 36rpx;
+  font-weight: bold;
+}
+
+.modal-close {
+  color: #6b7280;
+  font-size: 48rpx;
+  padding: 8rpx;
+}
+
+.modal-body {
+  padding: 32rpx 40rpx;
+  max-height: 600rpx;
+  overflow-y: auto;
+}
+
+/* 活动详情 */
+.event-detail {
+  margin-bottom: 32rpx;
+}
+
+.event-detail:last-child {
+  margin-bottom: 0;
+}
+
+.event-detail-image {
+  width: 100%;
+  height: 300rpx;
+  border-radius: 16rpx;
+  margin-bottom: 24rpx;
+}
+
+.event-detail-content {
+  text-align: left;
+}
+
+.event-detail-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16rpx;
+}
+
+.event-detail-title {
+  color: #ffffff;
+  font-size: 32rpx;
+  font-weight: bold;
+}
+
+.event-detail-tag {
+  padding: 8rpx 16rpx;
+  border-radius: 16rpx;
+  font-size: 24rpx;
+  font-weight: 500;
+}
+
+.event-detail-description {
+  color: #d1d5db;
+  font-size: 28rpx;
+  line-height: 1.6;
+  margin-bottom: 16rpx;
+  display: block;
+}
+
+.event-detail-period {
+  color: #6b7280;
+  font-size: 24rpx;
+}
+
+/* 指引文本 */
+.guide-text {
+  color: #d1d5db;
+  font-size: 28rpx;
+  margin-bottom: 16rpx;
+  display: block;
+}
+
+/* 到店指引模态框特殊样式 */
+.location-guide-modal {
+  max-width: 680rpx;
+  max-height: 90vh;
+  height: 90vh;
+  width: 90%;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background-color: #1a1a1a;
+  border-radius: 32rpx;
+}
+
+/* 停车指引模态框特殊样式 */
+.parking-guide-modal {
+  max-width: 680rpx;
+  max-height: 90vh;
+  height: 90vh;
+  width: 90%;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background-color: #1a1a1a;
+  border-radius: 32rpx;
+}
+
+/* 店铺环境全屏覆盖层 */
+.store-environment-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  z-index: 2000;
+  background-color: rgba(0, 0, 0, 0.95);
+}
+
+/* 奖励说明模态框特殊样式 */
+.rewards-guide-modal {
+  max-width: 680rpx;
+  max-height: 90vh;
+  height: 90vh;
+  width: 90%;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background-color: #1a1a1a;
+  border-radius: 32rpx;
+}
+
+/* 比赛规则模态框特殊样式 */
+.competition-rules-modal {
+  max-width: 680rpx;
+  max-height: 90vh;
+  height: 90vh;
+  width: 90%;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background-color: #1a1a1a;
+  border-radius: 32rpx;
+}
+
+/* 规则部分 */
+.rules-section {
+  margin-bottom: 32rpx;
+}
+
+.rules-section:last-child {
+  margin-bottom: 0;
+}
+
+.rules-title {
+  color: #FFED00;
+  font-size: 32rpx;
+  font-weight: bold;
+  margin-bottom: 16rpx;
+  display: block;
+}
+
+.rules-content {
+  color: #d1d5db;
+  font-size: 28rpx;
+  line-height: 1.8;
+  white-space: pre-line;
+}
+
+/* 奖励部分 */
+.rewards-section {
+  margin-bottom: 32rpx;
+}
+
+.rewards-section:last-child {
+  margin-bottom: 0;
+}
+
+.rewards-title {
+  color: #FFED00;
+  font-size: 32rpx;
+  font-weight: bold;
+  margin-bottom: 16rpx;
+  display: block;
+}
+
+.rewards-content {
+  color: #d1d5db;
+  font-size: 28rpx;
+  line-height: 1.8;
+  white-space: pre-line;
+}
+
+/* 环境图片 */
+.env-images {
+  display: flex;
+  flex-direction: column;
+  gap: 16rpx;
+  margin-bottom: 24rpx;
+}
+
+.env-image {
+  width: 100%;
+  height: 300rpx;
+  border-radius: 16rpx;
+}
+
+.env-description {
+  color: #d1d5db;
+  font-size: 28rpx;
+  line-height: 1.6;
+}
+
+/* 玩家评价 */
+.evaluation-item {
+  margin-bottom: 24rpx;
+  padding: 24rpx;
+  background-color: #2a2a2a;
+  border-radius: 16rpx;
+}
+
+.evaluation-item:last-child {
+  margin-bottom: 0;
+}
+
+.evaluation-type {
+  color: #FFED00;
+  font-size: 32rpx;
+  font-weight: bold;
+  margin-bottom: 8rpx;
+  display: block;
+}
+
+.evaluation-count {
+  color: #9ca3af;
+  font-size: 24rpx;
+  margin-bottom: 16rpx;
+  display: block;
+}
+
+.voters-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8rpx;
+}
+
+.voter-name {
+  background-color: #374151;
+  color: #d1d5db;
+  font-size: 24rpx;
+  padding: 6rpx 12rpx;
+  border-radius: 12rpx;
+}
+
+/* 扫码成功模态框 */
+.scan-success-modal {
+  max-width: 500rpx;
+}
+
+.scan-success-content {
+  padding: 48rpx 40rpx;
+  text-align: center;
+}
+
+.scan-success-icon {
+  font-size: 120rpx;
+  margin-bottom: 24rpx;
+  display: block;
+}
+
+.scan-success-title {
+  color: #ffffff;
+  font-size: 36rpx;
+  font-weight: bold;
+  margin-bottom: 16rpx;
+  display: block;
+}
+
+.scan-success-message {
+  color: #d1d5db;
+  font-size: 28rpx;
+  line-height: 1.6;
+  margin-bottom: 32rpx;
+  display: block;
+}
+
+/* 邀请模态框 */
+.invite-text {
+  color: #ffffff;
+  font-size: 32rpx;
+  font-weight: bold;
+  margin-bottom: 16rpx;
+  display: block;
+}
+
+.invite-description {
+  color: #d1d5db;
+  font-size: 28rpx;
+  line-height: 1.6;
+  margin-bottom: 32rpx;
+  display: block;
+}
+
+/* 按钮样式 */
+.btn-primary {
+  background: linear-gradient(135deg, #FFED00, #ffd700);
+  color: #000000;
+  border-radius: 24rpx;
+  font-weight: bold;
+  padding: 24rpx 48rpx;
+  border: none;
+  font-size: 32rpx;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.btn-primary:active {
+  transform: scale(0.98);
+}
+
+/* 响应式调整 */
+@media (max-width: 750rpx) {
+  .main-content {
+    padding: 0 24rpx;
+    padding-top: 40rpx;
+  }
+
+  .logo {
+    width: 120rpx;
+    height: 120rpx;
+  }
+
+  .welcome-text {
+    font-size: 24rpx;
+  }
+
+  .description {
+    font-size: 20rpx;
+    padding: 0;
+  }
+
+  .scan-card,
+  .feature-item,
+  .top-player-card,
+  .card-header {
+    padding: 32rpx;
+  }
+
+  .card-title {
+    font-size: 36rpx;
+  }
+
+  .modal-content {
+    width: 90%;
+  }
+}

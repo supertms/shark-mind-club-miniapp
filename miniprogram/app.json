@@ -1,0 +1,47 @@
+{
+  "pages": [
+    "pages/home/index",
+    "pages/ranking/index",
+    "pages/profile/index",
+    "pages/order/index",
+    "pages/pickup/index",
+    "pages/location-guide/index"
+  ],
+  "window": {
+    "backgroundTextStyle": "light",
+    "navigationBarBackgroundColor": "#000000",
+    "navigationBarTitleText": "鲨曼 Shark Mind Club",
+    "navigationBarTextStyle": "white",
+    "backgroundColor": "#000000"
+  },
+  "tabBar": {
+    "color": "#9ca3af",
+    "selectedColor": "#FFED00",
+    "backgroundColor": "#1a1a1a",
+    "borderStyle": "black",
+    "list": [
+      {
+        "pagePath": "pages/home/index",
+        "text": "首页"
+      },
+      {
+        "pagePath": "pages/ranking/index",
+        "text": "排行榜"
+      },
+      {
+        "pagePath": "pages/profile/index",
+        "text": "我的"
+      }
+    ]
+  },
+  "permission": {
+    "scope.userInfo": {
+      "desc": "用于获取用户基本信息"
+    }
+  },
+  "requiredBackgroundModes": [],
+  "networkTimeout": {
+    "request": 60000,
+    "downloadFile": 60000
+  }
+}

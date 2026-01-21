@@ -1,0 +1,299 @@
+<view class="container">
+  <!-- 主内容区域 -->
+  <view class="main-content">
+    <!-- Welcome Section -->
+    <view class="welcome-section">
+      <!-- Logo and Welcome -->
+      <view class="logo-section">
+        <image class="logo" src="/assets/logo.png" mode="aspectFit" />
+        <text class="welcome-text">欢迎加入 鲨曼 Shark Mind Club</text>
+        <view class="divider"></view>
+        <text class="description">
+          本俱乐部采取线下快速锦标赛模式，所有奖励均为无价值奖励，不可兑换不可销售，拒绝赌博，绿色竞技
+        </text>
+      </view>
+
+      <!-- Main Action Cards -->
+      <scroll-view class="action-cards" scroll-y="true">
+        <!-- 扫码上桌按钮 - 仅登录后显示 -->
+        <view wx:if="{{isLoggedIn}}" class="scan-card" bindtap="onScanCode">
+          <view class="scan-content">
+            <view class="scan-icon">📷</view>
+            <view class="scan-info">
+              <text class="scan-title">扫码参加比赛</text>
+              <text class="scan-subtitle">扫码前请咨询发牌员，确认已经开赛</text>
+            </view>
+          </view>
+          <text class="arrow">→</text>
+        </view>
+
+        <!-- 店内活动 -->
+        <view class="events-card" bindtap="onShowEventsModal">
+          <view class="card-header">
+            <text class="card-title">店内活动</text>
+            <text class="card-subtitle">Events & Promotions</text>
+          </view>
+
+          <!-- Today's Events Preview -->
+          <view wx:if="{{events.length > 0}}" class="events-preview">
+            <scroll-view class="events-scroll" scroll-x="true">
+              <view class="events-list">
+                <view
+                  wx:for="{{events}}"
+                  wx:key="id"
+                  class="event-item"
+                >
+                  <image class="event-image" src="{{item.imageUrl}}" mode="aspectFill" />
+                  <view
+                    class="event-tag {{item.statusTag === '今日特色' ? 'tag-featured' : item.statusTag === '明日预告' ? 'tag-tomorrow' : 'tag-ongoing'}}"
+                  >
+                    <text class="tag-text">
+                      {{item.statusTag === '今日特色' ? '今日' : item.statusTag === '明日预告' ? '明日' : '进行中'}}
+                    </text>
+                  </view>
+                  <text class="event-title">{{item.title}}</text>
+                </view>
+              </view>
+            </scroll-view>
+          </view>
+        </view>
+
+        <!-- Quick Features -->
+        <view class="quick-features">
+          <!-- 点餐 -->
+          <view class="feature-item" bindtap="onNavigateToOrder">
+            <view class="feature-icon">🍽️</view>
+            <view class="feature-info">
+              <text class="feature-title">点餐</text>
+              <text class="feature-subtitle">美食饮品</text>
+            </view>
+            <text class="feature-arrow">→</text>
+          </view>
+
+          <!-- 到店指引 -->
+          <view class="feature-item location-guide" bindtap="onShowLocationGuideModal">
+            <view class="new-badge">
+              <text>⭐</text>
+              <text>新人必看</text>
+            </view>
+            <view class="feature-icon">📍</view>
+            <view class="feature-info">
+              <text class="feature-title">到店指引</text>
+              <text class="feature-subtitle">珠江新城保利中达</text>
+            </view>
+            <text class="feature-arrow">→</text>
+          </view>
+
+          <!-- 停车指引 -->
+          <view class="feature-item" bindtap="onShowParkingGuideModal">
+            <view class="feature-icon">🚗</view>
+            <view class="feature-info">
+              <text class="feature-title">停车指引</text>
+              <text class="feature-subtitle">珠江新城保利中达</text>
+            </view>
+            <text class="feature-arrow">→</text>
+          </view>
+
+          <!-- 比赛规则 -->
+          <view class="feature-item" bindtap="onShowCompetitionRulesModal">
+            <view class="feature-icon">📖</view>
+            <view class="feature-info">
+              <text class="feature-title">比赛规则</text>
+              <text class="feature-subtitle">常规赛 · 周赛 · 月赛 · 双人赛</text>
+            </view>
+            <text class="feature-arrow">→</text>
+          </view>
+
+          <!-- 奖励说明 -->
+          <view class="feature-item" bindtap="onShowRewardsGuideModal">
+            <view class="feature-icon">🎁</view>
+            <view class="feature-info">
+              <text class="feature-title">奖励说明</text>
+              <text class="feature-subtitle">荣耀奖励 · 礼品说明</text>
+            </view>
+            <text class="feature-arrow">→</text>
+          </view>
+
+          <!-- 店铺环境 -->
+          <view class="feature-item" bindtap="onShowStoreEnvironmentModal">
+            <view class="feature-icon">📸</view>
+            <view class="feature-info">
+              <text class="feature-title">店铺环境</text>
+              <text class="feature-subtitle">了解更多店铺细节</text>
+            </view>
+            <text class="feature-arrow">→</text>
+          </view>
+
+          <!-- 反馈 -->
+          <view class="feature-item" bindtap="onFeedback">
+            <view class="feature-icon">💬</view>
+            <view class="feature-info">
+              <text class="feature-title">反馈</text>
+              <text class="feature-subtitle">意见建议</text>
+            </view>
+            <text class="feature-arrow">→</text>
+          </view>
+
+          <!-- 本周最受关注选手 -->
+          <view wx:if="{{topPlayer}}" class="top-player-card" bindtap="onSelectPlayer" data-player="{{topPlayer}}">
+            <view class="top-player-header">
+              <text class="top-player-title">🏆 本周最受关注选手</text>
+              <text class="top-player-arrow">→</text>
+            </view>
+
+            <view class="top-player-content">
+              <view class="player-avatar">
+                <text class="avatar-text">{{topPlayer.name[0]}}</text>
+              </view>
+
+              <view class="player-info">
+                <text class="player-name">{{topPlayer.name}}</text>
+                <view class="player-stats">
+                  <view class="stat-badge">
+                    <text class="stat-type">{{topPlayer.topTag.type}}</text>
+                    <text class="stat-count">{{topPlayer.topTag.count}}</text>
+                  </view>
+                  <text class="total-likes">共{{topPlayer.totalLikes}}个点赞</text>
+                </view>
+              </view>
+            </view>
+          </view>
+        </view>
+      </scroll-view>
+    </view>
+  </view>
+
+
+  <!-- 模态框 -->
+  <!-- Events Modal -->
+  <view wx:if="{{showEventsModal}}" class="modal-overlay" bindtap="onCloseModal" data-modal="showEventsModal">
+    <view class="modal-content events-modal" catchtap="">
+      <view class="modal-header">
+        <text class="modal-title">店内活动</text>
+        <text class="modal-close" bindtap="onCloseModal" data-modal="showEventsModal">✕</text>
+      </view>
+      <scroll-view class="modal-body" scroll-y="true">
+        <view wx:for="{{events}}" wx:key="id" class="event-detail">
+          <image class="event-detail-image" src="{{item.imageUrl}}" mode="aspectFill" />
+          <view class="event-detail-content">
+            <view class="event-detail-header">
+              <text class="event-detail-title">{{item.title}}</text>
+              <view class="event-detail-tag {{item.statusTag === '今日特色' ? 'tag-featured' : item.statusTag === '明日预告' ? 'tag-tomorrow' : 'tag-ongoing'}}">
+                <text>{{item.statusTag}}</text>
+              </view>
+            </view>
+            <text class="event-detail-description">{{item.description}}</text>
+            <text class="event-detail-period">有效期：{{item.validityPeriod}}</text>
+          </view>
+        </view>
+      </scroll-view>
+    </view>
+  </view>
+
+  <!-- Location Guide Modal -->
+  <view wx:if="{{showLocationGuideModal}}" class="modal-overlay" bindtap="onCloseModal" data-modal="showLocationGuideModal">
+    <view class="modal-content location-guide-modal" catchtap="">
+      <location-guide bind:close="onCloseLocationGuideModal" />
+    </view>
+  </view>
+
+  <!-- Parking Guide Modal -->
+  <view wx:if="{{showParkingGuideModal}}" class="modal-overlay" bindtap="onCloseModal" data-modal="showParkingGuideModal">
+    <view class="modal-content parking-guide-modal" catchtap="">
+      <parking-guide bind:close="onCloseParkingGuideModal" />
+    </view>
+  </view>
+
+  <!-- Competition Rules Modal -->
+  <view wx:if="{{showCompetitionRulesModal}}" class="modal-overlay" bindtap="onCloseModal" data-modal="showCompetitionRulesModal">
+    <view class="modal-content competition-rules-modal" catchtap="">
+      <competition-rules bind:close="onCloseCompetitionRulesModal" />
+    </view>
+  </view>
+
+  <!-- Rewards Guide Modal -->
+  <view wx:if="{{showRewardsGuideModal}}" class="modal-overlay" bindtap="onCloseModal" data-modal="showRewardsGuideModal">
+    <view class="modal-content rewards-guide-modal" catchtap="">
+      <rewards-guide bind:close="onCloseRewardsGuideModal" />
+    </view>
+  </view>
+
+  <!-- Store Environment Modal -->
+  <view wx:if="{{showStoreEnvironmentModal}}" class="store-environment-overlay">
+    <store-environment bind:close="onCloseStoreEnvironmentModal" />
+  </view>
+
+  <!-- Player Evaluation Modal -->
+  <view wx:if="{{selectedPlayer}}" class="modal-overlay" bindtap="onClosePlayerEvaluationModal">
+    <view class="modal-content" catchtap="">
+      <view class="modal-header">
+        <text class="modal-title">{{selectedPlayer.name}} 的玩家评价</text>
+        <text class="modal-close" bindtap="onClosePlayerEvaluationModal">✕</text>
+      </view>
+      <scroll-view class="modal-body" scroll-y="true">
+        <view wx:for="{{playerEvaluationsData[selectedPlayer.id]}}" wx:key="type" class="evaluation-item">
+          <text class="evaluation-type">{{item.type}}</text>
+          <text class="evaluation-count">{{item.voters.length}}人评价</text>
+          <view class="voters-list">
+            <text wx:for="{{item.voters}}" wx:key="id" class="voter-name">{{item.name}}</text>
+          </view>
+        </view>
+      </scroll-view>
+    </view>
+  </view>
+
+  <!-- Scan Success Modal -->
+  <view wx:if="{{showScanSuccessModal}}" class="modal-overlay" bindtap="onCloseScanSuccessModal">
+    <view class="modal-content scan-success-modal" catchtap="">
+      <view class="scan-success-content">
+        <text class="scan-success-icon">✅</text>
+        <text class="scan-success-title">扫码成功！</text>
+        <text class="scan-success-message">您已成功加入比赛队列，请前往指定牌桌就坐</text>
+        <button class="btn-primary" bindtap="onCloseScanSuccessModal">确定</button>
+      </view>
+    </view>
+  </view>
+
+  <!-- Invite Modal -->
+  <view wx:if="{{showInviteModal}}" class="modal-overlay" bindtap="onCloseModal" data-modal="showInviteModal">
+    <view class="modal-content" catchtap="">
+      <view class="modal-header">
+        <text class="modal-title">邀请好友</text>
+        <text class="modal-close" bindtap="onCloseModal" data-modal="showInviteModal">✕</text>
+      </view>
+      <view class="modal-body">
+        <text class="invite-text">🎉 邀请好友一起来玩德州扑克！</text>
+        <text class="invite-description">每成功邀请1位好友，双方各得100积分和50金币奖励</text>
+        <button class="btn-primary">分享给好友</button>
+      </view>
+    </view>
+  </view>
+
+  <!-- Order Modal -->
+  <view wx:if="{{showOrderModal}}" class="modal-overlay" bindtap="onCloseModal" data-modal="showOrderModal">
+    <view class="modal-content order-modal" catchtap="">
+      <view class="modal-header">
+        <text class="modal-title">点餐</text>
+        <text class="modal-close" bindtap="onCloseModal" data-modal="showOrderModal">✕</text>
+      </view>
+      <view class="modal-body">
+        <text>订单功能正在开发中...</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- Info Modal -->
+  <view wx:if="{{showInfoModal}}" class="modal-overlay" bindtap="onCloseModal" data-modal="showInfoModal">
+    <view class="modal-content" catchtap="">
+      <view class="modal-header">
+        <text class="modal-title">
+          {{showInfoModal === 'game-rules' ? '游戏规则' : showInfoModal === 'coin-info' ? '金币说明' : '排行榜规则'}}
+        </text>
+        <text class="modal-close" bindtap="onCloseModal" data-modal="showInfoModal">✕</text>
+      </view>
+      <view class="modal-body">
+        <text>信息内容...</text>
+      </view>
+    </view>
+  </view>
+</view>

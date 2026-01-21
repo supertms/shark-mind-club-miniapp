@@ -1,0 +1,181 @@
+<view class="container">
+  <!-- 已登录状态 -->
+  <view wx:if="{{isLoggedIn}}" class="logged-in-view">
+    <!-- 用户信息头部 -->
+    <view class="user-header">
+      <view class="user-info">
+        <view class="avatar">
+          <text class="avatar-text">{{user.name[0]}}</text>
+        </view>
+        <view class="user-details">
+          <text class="user-name">{{user.name}}</text>
+          <view class="user-meta">
+            <text class="user-id">ID: {{user.id}}</text>
+            <button class="settings-btn" bindtap="onOpenSettings">
+              <text class="settings-icon">⚙️</text>
+              <text class="settings-text">设置</text>
+            </button>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 内容区域 -->
+    <scroll-view class="content-scroll" scroll-y="true">
+      <!-- 菜单列表 -->
+      <view class="menu-list">
+        <view class="menu-item" bindtap="onHistoryOrders">
+          <view class="menu-icon">📄</view>
+          <view class="menu-content">
+            <text class="menu-title">历史订单</text>
+          </view>
+          <view class="menu-meta">
+            <text class="menu-status">即将开放</text>
+            <text class="menu-arrow">→</text>
+          </view>
+        </view>
+
+        <view class="menu-item" bindtap="onPlayerCareer">
+          <view class="menu-icon">🏆</view>
+          <view class="menu-content">
+            <text class="menu-title">玩家生涯</text>
+          </view>
+          <view class="menu-meta">
+            <text class="menu-status">即将开放</text>
+            <text class="menu-arrow">→</text>
+          </view>
+        </view>
+      </view>
+
+      <!-- 玩家评价区域 -->
+      <view wx:if="{{evaluations.length > 0}}" class="evaluations-section">
+        <view class="evaluations-header">
+          <text class="evaluations-title">玩家对我的评价</text>
+          <text class="evaluations-count">共{{getTotalEvaluations()}}个评价</text>
+        </view>
+
+        <view class="evaluations-list">
+          <view
+            wx:for="{{evaluations}}"
+            wx:key="type"
+            class="evaluation-item"
+          >
+            <view class="evaluation-header">
+              <text class="evaluation-type">{{item.type}}</text>
+              <view class="evaluation-badge">
+                <text class="badge-text">{{item.voters.length}}人点赞</text>
+              </view>
+            </view>
+
+            <view class="voters-list">
+              <text
+                wx:for="{{item.voters}}"
+                wx:for-item="voter"
+                wx:key="id"
+                class="voter-tag"
+              >
+                {{voter.name}}
+              </text>
+            </view>
+          </view>
+        </view>
+      </view>
+    </scroll-view>
+  </view>
+
+  <!-- 未登录状态 -->
+  <view wx:else class="not-logged-in-view">
+    <!-- 背景图片 -->
+    <image class="background-image" src="https://images.unsplash.com/photo-1620023652673-67fdb13dfe2a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxwb2tlciUyMHRhYmxlJTIwY2FyZHMlMjBkYXJrfGVufDF8fHx8MTc2ODgyNzQ4Mnww&ixlib=rb-4.1.0&q=80&w=1080" mode="aspectFill" />
+    <view class="background-overlay"></view>
+
+    <!-- 内容区域 -->
+    <view class="welcome-content">
+      <!-- 标题 -->
+      <view class="welcome-title">
+        <text>鲨曼 Shark Mind Club</text>
+      </view>
+
+      <!-- 功能预览 -->
+      <view class="features-preview">
+        <view class="feature-item">
+          <view class="feature-icon">🏆</view>
+          <view class="feature-info">
+            <text class="feature-title">实时排行榜</text>
+            <text class="feature-subtitle">展示你的实力与风格</text>
+          </view>
+        </view>
+
+        <view class="feature-item">
+          <view class="feature-icon">👥</view>
+          <view class="feature-info">
+            <text class="feature-title">玩家风格评价</text>
+            <text class="feature-subtitle">了解牌桌上的对手</text>
+          </view>
+        </view>
+
+        <view class="feature-item">
+          <view class="feature-icon">📄</view>
+          <view class="feature-info">
+            <text class="feature-title">在线点餐</text>
+            <text class="feature-subtitle">专注游戏，美食送达</text>
+          </view>
+        </view>
+      </view>
+
+      <!-- 登录按钮 -->
+      <button class="login-btn" bindtap="onLoginClick">
+        <text class="login-text">登录</text>
+        <text class="login-icon">🔑</text>
+      </button>
+    </view>
+  </view>
+
+
+  <!-- 微信登录模态框 -->
+  <view wx:if="{{showLoginModal}}" class="modal-overlay" bindtap="onCloseLoginModal">
+    <view class="modal-content login-modal" catchtap="">
+      <view class="modal-header">
+        <text class="modal-title">微信登录</text>
+        <text class="modal-close" bindtap="onCloseLoginModal">✕</text>
+      </view>
+      <view class="modal-body">
+        <text class="login-message">登录后即可享受完整功能</text>
+        <button class="wechat-login-btn" bindtap="onLoginConfirm">
+          <text>微信一键登录</text>
+        </button>
+      </view>
+    </view>
+  </view>
+
+  <!-- 评价设置模态框 -->
+  <view wx:if="{{showSettingsModal}}" class="modal-overlay" bindtap="onCloseSettingsModal">
+    <view class="modal-content settings-modal" catchtap="">
+      <view class="modal-header">
+        <text class="modal-title">评价设置</text>
+        <text class="modal-close" bindtap="onCloseSettingsModal">✕</text>
+      </view>
+      <view class="modal-body">
+        <text class="settings-message">设置是否允许其他玩家对你进行评价</text>
+
+        <view class="setting-item">
+          <text class="setting-label">允许评价</text>
+          <switch
+            checked="{{user.allowEvaluation}}"
+            bindchange="onToggleEvaluationSwitch"
+            disabled="{{!canToggleEvaluation()}}"
+            data-value="{{!user.allowEvaluation}}"
+          />
+        </view>
+
+        <view wx:if="{{!canToggleEvaluation()}}" class="cooldown-notice">
+          <text>设置过于频繁，请24小时后再试</text>
+        </view>
+
+        <view class="setting-status">
+          <text>当前状态：{{user.allowEvaluation ? '已开启' : '已关闭'}}</text>
+        </view>
+      </view>
+    </view>
+  </view>
+</view>

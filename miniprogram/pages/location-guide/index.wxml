@@ -1,0 +1,130 @@
+<view class="container">
+  <!-- Header -->
+  <view class="header">
+    <view class="title-section">
+      <text class="title-main">鲨曼桌游【到店指引】</text>
+      <text class="title-sub">SHARK MIND</text>
+    </view>
+    <text class="close-btn" bindtap="onBack">✕</text>
+  </view>
+
+  <!-- Content -->
+  <scroll-view class="content-scroll" scroll-y="true">
+    <view class="content-wrapper">
+      <!-- Contact & Address Info -->
+      <view class="contact-info-card">
+        <!-- Customer Service Phone -->
+        <view class="contact-row">
+          <text class="contact-icon-large">☎️</text>
+          <view class="contact-content-wrapper">
+            <text class="contact-label-text">客服电话</text>
+            <view class="phone-cards">
+              <view class="phone-card" bindtap="onCallPhone" data-phone="18520175662">
+                <text class="phone-number-text">185 2017 5662</text>
+                <text class="phone-icon-yellow">📞</text>
+              </view>
+              <view class="phone-card" bindtap="onCallPhone" data-phone="18810352879">
+                <text class="phone-number-text">188 1035 2879</text>
+                <text class="phone-icon-yellow">📞</text>
+              </view>
+            </view>
+          </view>
+        </view>
+
+        <!-- Customer Service WeChat -->
+        <view class="contact-row">
+          <text class="contact-icon-large">💬</text>
+          <view class="contact-content-wrapper">
+            <text class="contact-label-text">客服微信</text>
+            <text class="contact-value-text">v：Ppiswzhs</text>
+          </view>
+        </view>
+
+        <!-- Address -->
+        <view class="contact-row">
+          <text class="contact-icon-large">📍</text>
+          <view class="contact-content-wrapper">
+            <text class="contact-label-text">地址</text>
+            <text class="contact-value-text">珠江新城保利中达-三号楼1812</text>
+          </view>
+        </view>
+      </view>
+
+      <!-- Important Notes -->
+      <view class="important-notes-card">
+        <view class="note-row">
+          <view class="note-dot"></view>
+          <text class="note-text-white">本店位于十八楼，按定位导航可到本店楼下</text>
+        </view>
+        <view class="note-row">
+          <view class="note-dot"></view>
+          <text class="note-text-white">在【保利中达广场三号楼空中别墅】</text>
+        </view>
+        <view class="note-row note-row-last">
+          <view class="note-dot"></view>
+          <view class="note-with-icon">
+            <text class="note-icon-large">🚪</text>
+            <text class="note-text-white">门口有门禁 需要扫粤居码</text>
+          </view>
+        </view>
+      </view>
+
+      <!-- Guide Images -->
+      <view class="guide-images-section">
+        <text class="guide-section-title">📍 路线指引</text>
+
+        <!-- Step 1 -->
+        <view class="guide-step-card">
+          <view class="guide-image-container">
+            <image class="guide-image" src="../../assets/guide1.png" mode="aspectFit" />
+          </view>
+          <view class="guide-step-content">
+            <view class="step-badge-wrapper">
+              <view class="step-badge">步骤 1</view>
+            </view>
+            <text class="step-description">到达保利中达广场从三号楼天空别墅大堂</text>
+          </view>
+        </view>
+
+        <!-- Step 2 -->
+        <view class="guide-step-card">
+          <view class="guide-image-container">
+            <image class="guide-image" src="../../assets/guide2.png" mode="aspectFit" />
+          </view>
+          <view class="guide-step-content">
+            <view class="step-badge-wrapper">
+              <view class="step-badge">步骤 2</view>
+            </view>
+            <text class="step-description">从这里进入</text>
+          </view>
+        </view>
+
+        <!-- Step 3 -->
+        <view class="guide-step-card">
+          <view class="guide-image-container">
+            <image class="guide-image" src="../../assets/guide3.png" mode="aspectFit" />
+          </view>
+          <view class="guide-step-content">
+            <view class="step-badge-wrapper">
+              <view class="step-badge">步骤 3</view>
+            </view>
+            <text class="step-description">扫二维码，粤居码进入</text>
+          </view>
+        </view>
+
+        <!-- Step 4 -->
+        <view class="guide-step-card">
+          <view class="guide-image-container">
+            <image class="guide-image" src="../../assets/guide4.png" mode="aspectFit" />
+          </view>
+          <view class="guide-step-content">
+            <view class="step-badge-wrapper">
+              <view class="step-badge">步骤 4</view>
+            </view>
+            <text class="step-description">上电梯18楼，到1812</text>
+          </view>
+        </view>
+      </view>
+    </view>
+  </scroll-view>
+</view>

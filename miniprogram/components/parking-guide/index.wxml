@@ -1,0 +1,99 @@
+<!--components/parking-guide/index.wxml-->
+<view class="parking-guide-content">
+  <!-- Header -->
+  <view class="parking-header">
+    <view class="parking-title-section">
+      <text class="parking-title-main">鲨曼桌游【停车指引】</text>
+      <text class="parking-title-sub">SHARK MIND PARKING</text>
+    </view>
+    <text class="parking-close-btn" bindtap="onClose">✕</text>
+  </view>
+
+  <!-- Content -->
+  <scroll-view class="parking-content-scroll" scroll-y="true" enable-back-to-top="true" scroll-with-animation="true" show-scrollbar="true" enhanced="true" enable-flex="true" style="height: {{scrollHeight}}rpx">
+    <view class="parking-content-wrapper">
+      <!-- Parking Info -->
+      <view class="parking-info-card">
+        <view class="parking-info-row">
+          <text class="parking-icon-large">🅿️</text>
+          <view class="parking-info-content">
+            <text class="parking-label-text">停车场位置</text>
+            <text class="parking-value-text">珠江新城保利中达广场地下停车场</text>
+          </view>
+        </view>
+
+        <view class="parking-info-row">
+          <text class="parking-icon-large">💰</text>
+          <view class="parking-info-content">
+            <text class="parking-label-text">停车费用</text>
+            <text class="parking-value-text">具体收费标准请咨询物业管理处</text>
+          </view>
+        </view>
+      </view>
+
+      <!-- Important Notes -->
+      <view class="parking-important-notes-card">
+        <view class="parking-note-row">
+          <view class="parking-note-dot"></view>
+          <text class="parking-note-text-white">建议提前到达，预留找车位时间</text>
+        </view>
+        <view class="parking-note-row">
+          <view class="parking-note-dot"></view>
+          <text class="parking-note-text-white">停车场入口位于保利中达广场北侧</text>
+        </view>
+        <view class="parking-note-row">
+          <view class="parking-note-dot"></view>
+          <text class="parking-note-text-white">博物馆停车相对更便宜，但需提前预约看展方可进入</text>
+        </view>
+        <view class="parking-note-row">
+          <view class="parking-note-dot"></view>
+          <text class="parking-note-text-white">如有疑问请联系客服咨询停车事宜</text>
+        </view>
+      </view>
+
+      <!-- Guide Images -->
+      <view class="parking-guide-images-section">
+        <text class="parking-guide-section-title">🅿️ 停车指引</text>
+
+        <!-- Step 1 -->
+        <view class="parking-guide-step-card">
+          <view class="parking-guide-image-container">
+            <image class="parking-guide-image" src="../../assets/parking1.png" mode="aspectFit" />
+          </view>
+          <view class="parking-guide-step-content">
+            <view class="parking-step-badge-wrapper">
+              <view class="parking-step-badge">步骤 1</view>
+            </view>
+            <text class="parking-step-description">定位到保利中达广场停车场入口</text>
+          </view>
+        </view>
+
+        <!-- Step 2 -->
+        <view class="parking-guide-step-card">
+          <view class="parking-guide-image-container">
+            <image class="parking-guide-image" src="../../assets/parking2.png" mode="aspectFit" />
+          </view>
+          <view class="parking-guide-step-content">
+            <view class="parking-step-badge-wrapper">
+              <view class="parking-step-badge">步骤 2</view>
+            </view>
+            <text class="parking-step-description">进入地下停车场，寻找空余车位</text>
+          </view>
+        </view>
+
+        <!-- Step 3 -->
+        <view class="parking-guide-step-card">
+          <view class="parking-guide-image-container">
+            <image class="parking-guide-image" src="../../assets/parking3.png" mode="aspectFit" />
+          </view>
+          <view class="parking-guide-step-content">
+            <view class="parking-step-badge-wrapper">
+              <view class="parking-step-badge">步骤 3</view>
+            </view>
+            <text class="parking-step-description">停好车后前往电梯，上18楼到1812</text>
+          </view>
+        </view>
+      </view>
+    </view>
+  </scroll-view>
+</view>

@@ -1,0 +1,13 @@
+{
+  "navigationBarTitleText": "鲨曼 Shark Mind Club",
+  "navigationBarBackgroundColor": "#000000",
+  "navigationBarTextStyle": "white",
+  "backgroundColor": "#000000",
+  "usingComponents": {
+    "location-guide": "../../components/location-guide/index",
+    "parking-guide": "../../components/parking-guide/index",
+    "store-environment": "../../components/store-environment/index",
+    "rewards-guide": "../../components/rewards-guide/index",
+    "competition-rules": "../../components/competition-rules/index"
+  }
+}

@@ -1,0 +1,323 @@
+<view class="container">
+  <!-- 顶部横幅 -->
+  <view class="header-banner">
+    <view class="banner-bg-wrapper">
+      <image class="banner-bg" src="https://images.unsplash.com/photo-1762345127396-ac4a970436c3?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHx0cm9waHklMjBhY2hpZXZlbWVudCUyMHN1Y2Nlc3N8ZW58MXx8fHwxNzY4ODExNjA0fDA&ixlib=rb-4.1.0&q=80&w=1080" mode="aspectFill" />
+      <view class="banner-overlay"></view>
+    </view>
+    <view class="banner-content">
+      <text class="banner-icon">🏆</text>
+      <text class="banner-title">RANKING</text>
+    </view>
+    <!-- 榜单说明按钮 -->
+    <button class="rules-btn" bindtap="onShowRules">
+      <text>📋 榜单说明</text>
+    </button>
+  </view>
+
+  <!-- 标签页切换 -->
+  <view class="tab-container">
+    <button
+      wx:for="{{['week', 'month', 'quarter', 'year', 'winRate']}}"
+      wx:key="*this"
+      class="tab-item {{selectedTab === item ? 'active' : ''}}"
+      bindtap="onTabChange"
+      data-tab="{{item}}"
+    >
+      <text class="tab-text">
+        {{item === 'week' ? '周榜' : item === 'month' ? '月榜' : item === 'quarter' ? '季榜' : item === 'year' ? '年榜' : '进圈率'}}
+      </text>
+    </button>
+  </view>
+
+  <!-- 我的排名 - 移到列表上方 -->
+  <view wx:if="{{isLoggedIn && myRankingData}}" class="my-ranking-section">
+    <view class="my-ranking">
+      <view class="my-ranking-content">
+        <view class="my-avatar-container">
+          <view class="my-avatar">
+            <text class="my-avatar-text">{{myRankingData.name[0]}}</text>
+          </view>
+        </view>
+        <view class="my-info">
+          <text class="my-name">{{myRankingData.name}}</text>
+          <view class="my-stats">
+            <text wx:if="{{selectedTab === 'winRate'}}" class="my-points">
+              进圈率 {{myRankingData.winRate}}%
+            </text>
+            <text wx:else class="my-points">
+              {{myRankingData.formattedPoints}}分
+            </text>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 排行榜列表 -->
+  <scroll-view class="rankings-container" scroll-y="true" enable-flex="true">
+    <view class="rankings-list">
+      <view
+        wx:for="{{rankings}}"
+        wx:key="rank"
+        class="ranking-item"
+      >
+        <view class="ranking-content">
+          <!-- 头像和排名徽章 -->
+          <view class="avatar-container">
+            <view class="avatar">
+              <text class="avatar-text">{{item.name[0]}}</text>
+            </view>
+            <!-- 排名徽章 -->
+            <view class="rank-badge-wrapper">
+              <view wx:if="{{item.rank <= 3}}" class="rank-medal">
+                <text class="medal-icon">
+                  {{item.rank === 1 ? '🥇' : item.rank === 2 ? '🥈' : '🥉'}}
+                </text>
+              </view>
+              <view wx:else class="rank-number">
+                <text class="rank-number-text">{{item.rank}}</text>
+              </view>
+            </view>
+          </view>
+
+          <!-- 玩家信息 -->
+          <view class="player-info">
+            <text class="player-name">{{item.name}}</text>
+
+            <!-- 积分/进圈率显示 -->
+            <view wx:if="{{selectedTab === 'winRate'}}" class="stats-row">
+              <text class="points-text">进圈率 {{item.winRate}}%</text>
+              <text class="games-text">{{item.games}}局</text>
+            </view>
+            <view wx:else class="points-container">
+              <text class="points-text">{{item.formattedPoints}}分</text>
+            </view>
+
+            <!-- 评价标签 -->
+            <view wx:if="{{item.evaluationTags && item.evaluationTags.length > 0}}" class="evaluation-tags">
+              <view
+                wx:for="{{item.evaluationTags}}"
+                wx:for-item="evaluationTag"
+                wx:key="type"
+                class="evaluation-tag"
+              >
+                <text class="tag-type">{{evaluationTag.type}}</text>
+                <text class="tag-count">{{evaluationTag.voters.length}}</text>
+              </view>
+            </view>
+          </view>
+
+          <!-- 评价按钮 -->
+          <view wx:if="{{isLoggedIn && item.allowEvaluation}}" class="action-area">
+            <button
+              class="evaluate-btn"
+              bindtap="onSelectPlayer"
+              data-player="{{item}}"
+            >
+              <text>评价</text>
+            </button>
+          </view>
+        </view>
+      </view>
+    </view>
+  </scroll-view>
+
+
+  <!-- 榜单说明模态框 -->
+  <view wx:if="{{showRankingRules}}" class="ranking-rules-modal-overlay" bindtap="onCloseRankingRules">
+    <view class="ranking-rules-modal-content" catchtap="">
+      <!-- Header -->
+      <view class="ranking-rules-header">
+        <view class="ranking-rules-title-wrapper">
+          <text class="ranking-rules-icon">📋</text>
+          <text class="ranking-rules-title">榜单说明</text>
+        </view>
+        <text class="ranking-rules-subtitle">榜单更新规则与排名机制</text>
+      </view>
+
+      <!-- Content -->
+      <scroll-view class="ranking-rules-body" scroll-y="true" enable-flex="true" style="height: {{rankingRulesScrollHeight}}rpx">
+        <view class="ranking-rules-content">
+          <!-- 积分规则 -->
+          <view class="ranking-rules-section">
+            <view class="section-header">
+              <text class="section-icon">📊</text>
+              <text class="section-title">积分规则</text>
+              <text class="section-tag">月榜 · 周榜</text>
+            </view>
+            <view class="section-content">
+              <view class="section-text">
+                <text class="text-normal">积分来源：</text>
+                <text class="text-bold">常规赛、周赛、双人赛</text>
+              </view>
+              <view class="points-grid">
+                <view class="points-grid-item">
+                  <view class="points-card points-card-first">
+                    <text class="points-value">5</text>
+                    <text class="points-unit">分</text>
+                  </view>
+                  <text class="points-label">🥇 第一名</text>
+                </view>
+                <view class="points-grid-item">
+                  <view class="points-card points-card-second">
+                    <text class="points-value">3</text>
+                    <text class="points-unit">分</text>
+                  </view>
+                  <text class="points-label">🥈 第二名</text>
+                </view>
+                <view class="points-grid-item">
+                  <view class="points-card points-card-third">
+                    <text class="points-value">1</text>
+                    <text class="points-unit">分</text>
+                  </view>
+                  <text class="points-label">🥉 第三名</text>
+                </view>
+              </view>
+            </view>
+          </view>
+
+          <!-- 进圈率统计 -->
+          <view class="ranking-rules-section">
+            <view class="section-header">
+              <text class="section-icon">📈</text>
+              <text class="section-title">进圈率统计</text>
+              <text class="section-tag">进圈率榜</text>
+            </view>
+            <view class="section-content">
+              <view class="section-list-item">
+                <text class="list-dot">•</text>
+                <view class="list-content">
+                  <text class="text-normal">上榜条件</text>
+                  <text class="text-bold">：总计参加 </text>
+                  <text class="text-highlight">10场以上</text>
+                  <text class="text-normal"> 比赛</text>
+                </view>
+              </view>
+              <view class="section-list-item">
+                <text class="list-dot">•</text>
+                <view class="list-content">
+                  <text class="text-normal">进圈定义</text>
+                  <text class="text-bold">：每场比赛获得 </text>
+                  <text class="text-highlight">前三名</text>
+                </view>
+              </view>
+              <view class="section-list-item">
+                <text class="list-dot">•</text>
+                <view class="list-content">
+                  <text class="text-normal">数据保留</text>
+                  <text class="text-bold">：历史数据永久保留，实时更新</text>
+                </view>
+              </view>
+            </view>
+          </view>
+
+          <!-- 榜单刷新 -->
+          <view class="ranking-rules-section">
+            <view class="section-header">
+              <text class="section-icon">🔄</text>
+              <text class="section-title">榜单刷新</text>
+            </view>
+            <view class="section-content">
+              <view class="section-list-item">
+                <text class="list-dot-yellow">•</text>
+                <view class="list-content">
+                  <text class="text-bold">周榜</text>
+                  <text class="text-normal">：每周日 23:59 截止</text>
+                </view>
+              </view>
+              <view class="section-list-item">
+                <text class="list-dot-yellow">•</text>
+                <view class="list-content">
+                  <text class="text-bold">月榜</text>
+                  <text class="text-normal">：每月最后一天 23:59 截止</text>
+                </view>
+              </view>
+              <view class="section-list-item">
+                <text class="list-dot-yellow">•</text>
+                <view class="list-content">
+                  <text class="text-bold">季榜</text>
+                  <text class="text-normal">：每季度最后一天 23:59 截止</text>
+                </view>
+              </view>
+              <view class="section-list-item">
+                <text class="list-dot-yellow">•</text>
+                <view class="list-content">
+                  <text class="text-bold">年榜</text>
+                  <text class="text-normal">：每年最后一天 23:59 截止</text>
+                </view>
+              </view>
+            </view>
+          </view>
+
+          <!-- 并列排名 -->
+          <view class="ranking-rules-section">
+            <view class="section-header">
+              <text class="section-icon">🎯</text>
+              <text class="section-title">并列排名</text>
+            </view>
+            <view class="section-content">
+              <text class="section-description">当榜单中出现并列情况时，排名规则如下：</text>
+              <view class="ranking-rules-list">
+                <view class="ranking-rules-list-item">
+                  <view class="ranking-number-badge">1</view>
+                  <view class="list-content">
+                    <text class="text-normal">优先比较</text>
+                    <text class="text-bold">比赛场数</text>
+                    <text class="text-normal">，场数越多排名越靠前</text>
+                  </view>
+                </view>
+                <view class="ranking-rules-list-item">
+                  <view class="ranking-number-badge">2</view>
+                  <view class="list-content">
+                    <text class="text-normal">场数相同时，</text>
+                    <text class="text-bold">注册时间</text>
+                    <text class="text-normal">越早排名越靠前</text>
+                  </view>
+                </view>
+              </view>
+            </view>
+          </view>
+
+          <!-- 提示信息 -->
+          <view class="ranking-rules-tip">
+            <text class="tip-icon">💡</text>
+            <view class="tip-content">
+              <text class="tip-highlight">温馨提示</text>
+              <text class="tip-text">：多参与比赛不仅能提升技术，还能在并列时获得更高排名哦！</text>
+            </view>
+          </view>
+        </view>
+      </scroll-view>
+
+      <!-- Footer Button -->
+      <view class="ranking-rules-footer">
+        <button class="ranking-rules-confirm-btn" bindtap="onCloseRankingRules">
+          <text>知道了</text>
+        </button>
+      </view>
+    </view>
+  </view>
+
+  <!-- 玩家评价模态框 -->
+  <view wx:if="{{selectedPlayer}}" class="modal-overlay" bindtap="onClosePlayerEvaluation">
+    <view class="modal-content" catchtap="">
+      <view class="modal-header">
+        <text class="modal-title">{{selectedPlayer.name}} 的玩家评价</text>
+        <text class="modal-close" bindtap="onClosePlayerEvaluation">✕</text>
+      </view>
+      <scroll-view class="modal-body" scroll-y="true">
+        <view wx:for="{{selectedPlayer.evaluations}}" wx:for-item="evaluation" wx:key="type" class="evaluation-item">
+          <text class="evaluation-type">{{evaluation.type}}</text>
+          <text class="evaluation-count">{{evaluation.voters.length}}人评价</text>
+          <view class="voters-list">
+            <text wx:for="{{evaluation.voters}}" wx:for-item="voter" wx:key="id" class="voter-name">{{voter.name}}</text>
+          </view>
+        </view>
+        <view wx:if="{{!selectedPlayer.evaluations || selectedPlayer.evaluations.length === 0}}" class="no-evaluations">
+          <text>暂无评价</text>
+        </view>
+      </scroll-view>
+    </view>
+  </view>
+</view>

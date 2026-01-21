@@ -1,0 +1,274 @@
+/* components/competition-rules/index.wxss */
+.competition-rules-content {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+}
+
+/* 头部 */
+.competition-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 32rpx 48rpx;
+  border-bottom: 2rpx solid #374151;
+  flex-shrink: 0;
+  background-color: #1a1a1a;
+}
+
+.competition-title-section {
+  display: flex;
+  flex-direction: column;
+}
+
+.competition-title-main {
+  color: #ffffff;
+  font-size: 40rpx;
+  font-weight: bold;
+}
+
+.competition-title-sub {
+  color: #9ca3af;
+  font-size: 28rpx;
+  margin-top: 8rpx;
+}
+
+.competition-close-btn {
+  color: #9ca3af;
+  font-size: 48rpx;
+  padding: 8rpx;
+}
+
+.competition-close-btn:active {
+  color: #ffffff;
+}
+
+/* 内容滚动区域 */
+.competition-content-scroll {
+  flex: 1;
+  min-height: 0;
+  padding: 32rpx 48rpx;
+  box-sizing: border-box;
+}
+
+.competition-content-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 48rpx;
+}
+
+/* 酒水券卡片 */
+.drink-voucher-card {
+  background: linear-gradient(135deg, #2a2a2a, #1a1a1a);
+  border: 2rpx solid #374151;
+  border-radius: 24rpx;
+  padding: 40rpx;
+}
+
+.drink-voucher-header {
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+  margin-bottom: 32rpx;
+}
+
+.drink-voucher-icon {
+  font-size: 40rpx;
+}
+
+.drink-voucher-title {
+  color: #ffffff;
+  font-size: 32rpx;
+  font-weight: bold;
+}
+
+.drink-voucher-content {
+  background-color: rgba(0, 0, 0, 0.4);
+  border-radius: 16rpx;
+  padding: 32rpx;
+}
+
+.drink-voucher-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 24rpx;
+}
+
+.drink-voucher-dot {
+  width: 12rpx;
+  height: 12rpx;
+  background-color: #FFED00;
+  border-radius: 50%;
+  flex-shrink: 0;
+  margin-top: 8rpx;
+}
+
+.drink-voucher-text-wrapper {
+  flex: 1;
+}
+
+.drink-voucher-text {
+  color: #d1d5db;
+  font-size: 28rpx;
+  line-height: 1.8;
+  display: block;
+  margin-bottom: 16rpx;
+}
+
+.drink-voucher-highlight {
+  color: #FFED00;
+  font-weight: bold;
+}
+
+.drink-voucher-desc {
+  color: #9ca3af;
+  font-size: 28rpx;
+  line-height: 1.8;
+  display: block;
+}
+
+/* 比赛列表 */
+.competitions-list {
+  display: flex;
+  flex-direction: column;
+  gap: 48rpx;
+}
+
+/* 比赛卡片 */
+.competition-card {
+  background-color: #2a2a2a;
+  border-radius: 24rpx;
+  overflow: hidden;
+  border: 2rpx solid #374151;
+}
+
+.competition-card-header {
+  background: linear-gradient(90deg, #2a2a2a, #333333);
+  padding: 40rpx;
+  border-bottom: 2rpx solid #374151;
+}
+
+.competition-card-title-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24rpx;
+}
+
+.competition-card-title-left {
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+}
+
+.competition-card-icon {
+  font-size: 60rpx;
+}
+
+.competition-card-name {
+  color: #ffffff;
+  font-size: 40rpx;
+  font-weight: bold;
+}
+
+.competition-tag {
+  padding: 8rpx 24rpx;
+  border-radius: 50rpx;
+  font-size: 24rpx;
+  font-weight: 500;
+  border: 2rpx solid;
+}
+
+/* 信息网格 */
+.competition-info-grid {
+  display: flex;
+  gap: 16rpx;
+}
+
+.competition-info-item {
+  flex: 1;
+  background-color: rgba(0, 0, 0, 0.3);
+  border-radius: 16rpx;
+  padding: 16rpx 24rpx;
+}
+
+.competition-info-label {
+  color: #6b7280;
+  font-size: 24rpx;
+  margin-bottom: 8rpx;
+  display: block;
+}
+
+.competition-info-value {
+  color: #ffffff;
+  font-size: 28rpx;
+  font-weight: 500;
+  display: block;
+  line-height: 1.4;
+}
+
+.competition-info-reward {
+  color: #FFED00;
+}
+
+/* 比赛规则部分 */
+.competition-rules-section {
+  padding: 40rpx;
+}
+
+.competition-rules-title {
+  color: #ffffff;
+  font-size: 32rpx;
+  font-weight: bold;
+  margin-bottom: 24rpx;
+  display: block;
+}
+
+.competition-rules-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16rpx;
+}
+
+.competition-rule-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 16rpx;
+}
+
+.competition-rule-dot {
+  width: 12rpx;
+  height: 12rpx;
+  background-color: #6b7280;
+  border-radius: 50%;
+  flex-shrink: 0;
+  margin-top: 12rpx;
+}
+
+.competition-rule-text {
+  color: #9ca3af;
+  font-size: 28rpx;
+  line-height: 1.8;
+  flex: 1;
+}
+
+/* 底部提示 */
+.competition-footer-note {
+  background: linear-gradient(135deg, rgba(255, 237, 0, 0.1), rgba(255, 237, 0, 0.05));
+  border: 2rpx solid rgba(255, 237, 0, 0.2);
+  border-radius: 24rpx;
+  padding: 32rpx;
+}
+
+.competition-footer-text {
+  color: #d1d5db;
+  font-size: 28rpx;
+  line-height: 1.8;
+}
+
+.competition-footer-highlight {
+  color: #FFED00;
+  font-weight: bold;
+}

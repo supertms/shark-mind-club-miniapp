@@ -1,0 +1,36 @@
+@import './fonts.css';
+@import './tailwind.css';
+@import './theme.css';
+
+/* Toast 居中显示 - 适配水滴屏 */
+[data-sonner-toaster] {
+  position: fixed !important;
+  top: 50% !important;
+  left: 50% !important;
+  transform: translate(-50%, -50%) !important;
+  width: 90vw !important;
+  max-width: 650px !important;
+}
+
+[data-sonner-toast] {
+  width: 100% !important;
+  max-width: 100% !important;
+  min-width: auto !important;
+  margin: 0 0 12px 0 !important;
+  padding: 16px 24px !important;
+  box-sizing: border-box !important;
+}
+
+[data-sonner-toast] [data-content] {
+  width: 100% !important;
+  white-space: normal !important;
+  word-wrap: break-word !important;
+}
+
+[data-sonner-toast] [data-title] {
+  width: 100% !important;
+  white-space: normal !important;
+  word-wrap: break-word !important;
+  font-size: 15px !important;
+  line-height: 1.4 !important;
+}

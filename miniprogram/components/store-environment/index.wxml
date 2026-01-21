@@ -1,0 +1,51 @@
+<!--components/store-environment/index.wxml-->
+<view class="store-environment-container">
+  <!-- Title & Close Button -->
+  <view class="store-title-section">
+    <text class="store-title-main">店内环境</text>
+    <text class="store-title-sub">Store Environment</text>
+    <view class="store-close-btn" bindtap="onClose">
+      <text class="store-close-icon">✕</text>
+      <text class="store-close-text">关闭</text>
+    </view>
+  </view>
+
+  <!-- Counter -->
+  <view class="store-counter">
+    <text class="store-counter-current">{{currentIndex + 1}}</text>
+    <text class="store-counter-separator">/</text>
+    <text class="store-counter-total">{{storeImages.length}}</text>
+  </view>
+
+  <!-- Main Image Display -->
+  <view class="store-image-display">
+    <!-- Background Blur Effect -->
+    <image class="store-bg-blur" src="{{storeImages[currentIndex].url}}" mode="aspectFill" />
+
+    <!-- Main Image Container -->
+    <view class="store-image-container">
+      <image class="store-main-image" src="{{storeImages[currentIndex].url}}" mode="aspectFit" />
+      
+      <!-- Left Arrow -->
+      <view class="store-arrow store-arrow-left" bindtap="goToPrevious">
+        <text class="store-arrow-icon">‹</text>
+      </view>
+
+      <!-- Right Arrow -->
+      <view class="store-arrow store-arrow-right" bindtap="goToNext">
+        <text class="store-arrow-icon">›</text>
+      </view>
+    </view>
+
+    <!-- Dot Indicators -->
+    <view class="store-dots">
+      <view 
+        wx:for="{{storeImages}}" 
+        wx:key="index"
+        class="store-dot {{currentIndex === index ? 'store-dot-active' : ''}}"
+        bindtap="goToImage"
+        data-index="{{index}}"
+      ></view>
+    </view>
+  </view>
+</view>

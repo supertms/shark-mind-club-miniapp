@@ -1,0 +1,88 @@
+<!--components/competition-rules/index.wxml-->
+<view class="competition-rules-content">
+  <!-- Header -->
+  <view class="competition-header">
+    <view class="competition-title-section">
+      <text class="competition-title-main">比赛规则</text>
+      <text class="competition-title-sub">Competition Rules</text>
+    </view>
+    <text class="competition-close-btn" bindtap="onClose">✕</text>
+  </view>
+
+  <!-- Content -->
+  <scroll-view class="competition-content-scroll" scroll-y="true" enable-back-to-top="true" scroll-with-animation="true" show-scrollbar="true" enhanced="true" enable-flex="true" style="height: {{scrollHeight}}rpx">
+    <view class="competition-content-wrapper">
+      <!-- Drink Voucher Pricing -->
+      <view class="drink-voucher-card">
+        <view class="drink-voucher-header">
+          <text class="drink-voucher-icon">🍺</text>
+          <text class="drink-voucher-title">酒水券售价</text>
+        </view>
+        <view class="drink-voucher-content">
+          <view class="drink-voucher-item">
+            <view class="drink-voucher-dot"></view>
+            <view class="drink-voucher-text-wrapper">
+              <text class="drink-voucher-text">
+                <text class="drink-voucher-highlight">66元</text> 和 <text class="drink-voucher-highlight">88元</text> 酒水套餐包含：
+              </text>
+              <text class="drink-voucher-desc">指定啤酒 1 瓶或饮料畅饮（二选一）并含小吃一份</text>
+            </view>
+          </view>
+        </view>
+      </view>
+
+      <!-- Competitions List -->
+      <view class="competitions-list">
+        <view wx:for="{{competitions}}" wx:key="id" class="competition-card">
+          <!-- Competition Header -->
+          <view class="competition-card-header">
+            <view class="competition-card-title-row">
+              <view class="competition-card-title-left">
+                <text class="competition-card-icon">{{item.icon}}</text>
+                <text class="competition-card-name">{{item.name}}</text>
+              </view>
+              <view class="competition-tag" style="background-color: {{item.tagBg}}; border-color: {{item.tagBorder}}; color: {{item.tagColor}}">
+                {{item.tagText}}
+              </view>
+            </view>
+
+            <!-- Key Info Grid -->
+            <view class="competition-info-grid">
+              <view class="competition-info-item">
+                <text class="competition-info-label">报名费</text>
+                <text class="competition-info-value">{{item.buyIn}}</text>
+              </view>
+              <view class="competition-info-item">
+                <text class="competition-info-label">奖励</text>
+                <text class="competition-info-value competition-info-reward">{{item.reward}}</text>
+              </view>
+              <view class="competition-info-item">
+                <text class="competition-info-label">时间</text>
+                <text class="competition-info-value">{{item.schedule}}</text>
+              </view>
+            </view>
+          </view>
+
+          <!-- Competition Rules -->
+          <view class="competition-rules-section">
+            <text class="competition-rules-title">📋 比赛规则</text>
+            <view class="competition-rules-list">
+              <view wx:for="{{item.rules}}" wx:for-item="rule" wx:key="*this" wx:for-index="ruleIndex" class="competition-rule-item">
+                <view class="competition-rule-dot"></view>
+                <text class="competition-rule-text">{{rule}}</text>
+              </view>
+            </view>
+          </view>
+        </view>
+      </view>
+
+      <!-- Footer Note -->
+      <view class="competition-footer-note">
+        <text class="competition-footer-text">
+          <text class="competition-footer-highlight">温馨提示：</text>
+          所有比赛均需提前报名，报名截止时间为比赛开始前1小时。详细规则请咨询现场工作人员。
+        </text>
+      </view>
+    </view>
+  </scroll-view>
+</view>
