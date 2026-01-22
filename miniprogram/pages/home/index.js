@@ -165,6 +165,69 @@ Page({
     this.setData({
       showLocationGuideModal: true
     });
+    // 计算滚动区域高度
+    this.calculateLocationGuideHeight();
+  },
+
+  // 计算位置指引滚动区域高度
+  calculateLocationGuideHeight: function () {
+    const query = wx.createSelectorQuery().in(this);
+    const systemInfo = wx.getSystemInfoSync();
+    const screenHeight = systemInfo.windowHeight;
+    
+    // 使用 nextTick 确保 DOM 已经渲染
+    wx.nextTick(() => {
+      // 查询模态框和头部高度
+      query.select('.location-guide-modal').boundingClientRect();
+      query.select('.location-header').boundingClientRect();
+      query.exec((res) => {
+        if (res[0] && res[1]) {
+          const modalHeight = res[0].height;
+          const headerHeight = res[1].height;
+          const modalPadding = 64; // 32rpx * 2
+          const availableHeight = modalHeight - headerHeight - modalPadding;
+          const scrollHeight = Math.max(availableHeight * 2, 600); // 转换为rpx，至少600rpx
+          
+          console.log('位置指引滚动区域高度计算:', {
+            screenHeight,
+            modalHeight,
+            headerHeight,
+            availableHeight,
+            scrollHeight
+          });
+        } else if (res[0]) {
+          // 如果只查询到模态框，使用估算的头部高度
+          const modalHeight = res[0].height;
+          const estimatedHeaderHeight = 120; // 估算头部高度（px）
+          const modalPadding = 64;
+          const availableHeight = modalHeight - estimatedHeaderHeight - modalPadding;
+          const scrollHeight = Math.max(availableHeight * 2, 600);
+          
+          console.log('位置指引滚动区域高度计算（估算头部）:', {
+            screenHeight,
+            modalHeight,
+            estimatedHeaderHeight,
+            availableHeight,
+            scrollHeight
+          });
+        } else {
+          // 如果查询失败，使用默认计算方式
+          const modalHeight = screenHeight * 0.9;
+          const estimatedHeaderHeight = 120; // 估算头部高度（px）
+          const modalPadding = 64;
+          const availableHeight = modalHeight - estimatedHeaderHeight - modalPadding;
+          const scrollHeight = Math.max(availableHeight * 2, 600);
+          
+          console.log('位置指引滚动区域高度计算（完全估算）:', {
+            screenHeight,
+            modalHeight,
+            estimatedHeaderHeight,
+            availableHeight,
+            scrollHeight
+          });
+        }
+      });
+    });
   },
 
   // 关闭位置指引模态框
@@ -208,6 +271,69 @@ Page({
     this.setData({
       showParkingGuideModal: true
     });
+    // 计算滚动区域高度
+    this.calculateParkingGuideHeight();
+  },
+
+  // 计算停车指引滚动区域高度
+  calculateParkingGuideHeight: function () {
+    const query = wx.createSelectorQuery().in(this);
+    const systemInfo = wx.getSystemInfoSync();
+    const screenHeight = systemInfo.windowHeight;
+    
+    // 使用 nextTick 确保 DOM 已经渲染
+    wx.nextTick(() => {
+      // 查询模态框和头部高度
+      query.select('.parking-guide-modal').boundingClientRect();
+      query.select('.parking-header').boundingClientRect();
+      query.exec((res) => {
+        if (res[0] && res[1]) {
+          const modalHeight = res[0].height;
+          const headerHeight = res[1].height;
+          const modalPadding = 64; // 32rpx * 2
+          const availableHeight = modalHeight - headerHeight - modalPadding;
+          const scrollHeight = Math.max(availableHeight * 2, 600); // 转换为rpx，至少600rpx
+          
+          console.log('停车指引滚动区域高度计算:', {
+            screenHeight,
+            modalHeight,
+            headerHeight,
+            availableHeight,
+            scrollHeight
+          });
+        } else if (res[0]) {
+          // 如果只查询到模态框，使用估算的头部高度
+          const modalHeight = res[0].height;
+          const estimatedHeaderHeight = 120; // 估算头部高度（px）
+          const modalPadding = 64;
+          const availableHeight = modalHeight - estimatedHeaderHeight - modalPadding;
+          const scrollHeight = Math.max(availableHeight * 2, 600);
+          
+          console.log('停车指引滚动区域高度计算（估算头部）:', {
+            screenHeight,
+            modalHeight,
+            estimatedHeaderHeight,
+            availableHeight,
+            scrollHeight
+          });
+        } else {
+          // 如果查询失败，使用默认计算方式
+          const modalHeight = screenHeight * 0.7;
+          const estimatedHeaderHeight = 120; // 估算头部高度（px）
+          const modalPadding = 64;
+          const availableHeight = modalHeight - estimatedHeaderHeight - modalPadding;
+          const scrollHeight = Math.max(availableHeight * 2, 600);
+          
+          console.log('停车指引滚动区域高度计算（完全估算）:', {
+            screenHeight,
+            modalHeight,
+            estimatedHeaderHeight,
+            availableHeight,
+            scrollHeight
+          });
+        }
+      });
+    });
   },
 
   // 显示比赛规则模态框
@@ -215,12 +341,138 @@ Page({
     this.setData({
       showCompetitionRulesModal: true
     });
+    // 计算滚动区域高度
+    this.calculateCompetitionRulesHeight();
+  },
+
+  // 计算比赛规则滚动区域高度
+  calculateCompetitionRulesHeight: function () {
+    const query = wx.createSelectorQuery().in(this);
+    const systemInfo = wx.getSystemInfoSync();
+    const screenHeight = systemInfo.windowHeight;
+    
+    // 使用 nextTick 确保 DOM 已经渲染
+    wx.nextTick(() => {
+      // 查询模态框和头部高度
+      query.select('.competition-rules-modal').boundingClientRect();
+      query.select('.competition-header').boundingClientRect();
+      query.exec((res) => {
+        if (res[0] && res[1]) {
+          const modalHeight = res[0].height;
+          const headerHeight = res[1].height;
+          const modalPadding = 64; // 32rpx * 2
+          const availableHeight = modalHeight - headerHeight - modalPadding;
+          const scrollHeight = Math.max(availableHeight * 2, 600); // 转换为rpx，至少600rpx
+          
+          console.log('比赛规则滚动区域高度计算:', {
+            screenHeight,
+            modalHeight,
+            headerHeight,
+            availableHeight,
+            scrollHeight
+          });
+        } else if (res[0]) {
+          // 如果只查询到模态框，使用估算的头部高度
+          const modalHeight = res[0].height;
+          const estimatedHeaderHeight = 120; // 估算头部高度（px）
+          const modalPadding = 64;
+          const availableHeight = modalHeight - estimatedHeaderHeight - modalPadding;
+          const scrollHeight = Math.max(availableHeight * 2, 600);
+          
+          console.log('比赛规则滚动区域高度计算（估算头部）:', {
+            screenHeight,
+            modalHeight,
+            estimatedHeaderHeight,
+            availableHeight,
+            scrollHeight
+          });
+        } else {
+          // 如果查询失败，使用默认计算方式
+          const modalHeight = screenHeight * 0.7;
+          const estimatedHeaderHeight = 120; // 估算头部高度（px）
+          const modalPadding = 64;
+          const availableHeight = modalHeight - estimatedHeaderHeight - modalPadding;
+          const scrollHeight = Math.max(availableHeight * 2, 600);
+          
+          console.log('比赛规则滚动区域高度计算（完全估算）:', {
+            screenHeight,
+            modalHeight,
+            estimatedHeaderHeight,
+            availableHeight,
+            scrollHeight
+          });
+        }
+      });
+    });
   },
 
   // 显示奖励说明模态框
   onShowRewardsGuideModal: function () {
     this.setData({
       showRewardsGuideModal: true
+    });
+    // 计算滚动区域高度
+    this.calculateRewardsGuideHeight();
+  },
+
+  // 计算奖励说明滚动区域高度
+  calculateRewardsGuideHeight: function () {
+    const query = wx.createSelectorQuery().in(this);
+    const systemInfo = wx.getSystemInfoSync();
+    const screenHeight = systemInfo.windowHeight;
+    
+    // 使用 nextTick 确保 DOM 已经渲染
+    wx.nextTick(() => {
+      // 查询模态框和头部高度
+      query.select('.rewards-guide-modal').boundingClientRect();
+      query.select('.rewards-header').boundingClientRect();
+      query.exec((res) => {
+        if (res[0] && res[1]) {
+          const modalHeight = res[0].height;
+          const headerHeight = res[1].height;
+          const modalPadding = 64; // 32rpx * 2
+          const availableHeight = modalHeight - headerHeight - modalPadding;
+          const scrollHeight = Math.max(availableHeight * 2, 600); // 转换为rpx，至少600rpx
+          
+          console.log('奖励说明滚动区域高度计算:', {
+            screenHeight,
+            modalHeight,
+            headerHeight,
+            availableHeight,
+            scrollHeight
+          });
+        } else if (res[0]) {
+          // 如果只查询到模态框，使用估算的头部高度
+          const modalHeight = res[0].height;
+          const estimatedHeaderHeight = 120; // 估算头部高度（px）
+          const modalPadding = 64;
+          const availableHeight = modalHeight - estimatedHeaderHeight - modalPadding;
+          const scrollHeight = Math.max(availableHeight * 2, 600);
+          
+          console.log('奖励说明滚动区域高度计算（估算头部）:', {
+            screenHeight,
+            modalHeight,
+            estimatedHeaderHeight,
+            availableHeight,
+            scrollHeight
+          });
+        } else {
+          // 如果查询失败，使用默认计算方式
+          const modalHeight = screenHeight * 0.7;
+          const estimatedHeaderHeight = 120; // 估算头部高度（px）
+          const modalPadding = 64;
+          const availableHeight = modalHeight - estimatedHeaderHeight - modalPadding;
+          const scrollHeight = Math.max(availableHeight * 2, 600);
+          
+          console.log('奖励说明滚动区域高度计算（完全估算）:', {
+            screenHeight,
+            modalHeight,
+            estimatedHeaderHeight,
+            availableHeight,
+            scrollHeight
+          });
+        }
+      });
     });
   },
 

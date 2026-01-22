@@ -7,7 +7,7 @@
   </view>
 
   <!-- Content -->
-  <scroll-view class="rewards-content-scroll" scroll-y="true" enable-back-to-top="true" scroll-with-animation="true" show-scrollbar="true" enhanced="true" enable-flex="true" style="height: {{scrollHeight}}rpx">
+  <scroll-view class="rewards-content-scroll" scroll-y="true" enable-back-to-top="true" scroll-with-animation="true" show-scrollbar="true" enhanced="true" style="height: {{scrollHeight}}rpx">
     <view class="rewards-content-wrapper">
       <!-- 周榜和月榜奖励 -->
       <view class="rewards-card rewards-card-yellow">

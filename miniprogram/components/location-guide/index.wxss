@@ -48,9 +48,9 @@
 
 /* 内容滚动区域 */
 .location-content-scroll {
-  flex: 1;
-  min-height: 0;
   width: 100%;
+  /* 高度通过 style 动态设置，不使用 flex */
+  overflow-y: auto;
 }
 
 .location-content-wrapper {

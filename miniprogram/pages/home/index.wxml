@@ -193,28 +193,28 @@
   <!-- Location Guide Modal -->
   <view wx:if="{{showLocationGuideModal}}" class="modal-overlay" bindtap="onCloseModal" data-modal="showLocationGuideModal">
     <view class="modal-content location-guide-modal" catchtap="">
-      <location-guide bind:close="onCloseLocationGuideModal" />
+      <location-guide show="{{showLocationGuideModal}}" bind:close="onCloseLocationGuideModal" />
     </view>
   </view>
 
   <!-- Parking Guide Modal -->
   <view wx:if="{{showParkingGuideModal}}" class="modal-overlay" bindtap="onCloseModal" data-modal="showParkingGuideModal">
     <view class="modal-content parking-guide-modal" catchtap="">
-      <parking-guide bind:close="onCloseParkingGuideModal" />
+      <parking-guide show="{{showParkingGuideModal}}" bind:close="onCloseParkingGuideModal" />
     </view>
   </view>
 
   <!-- Competition Rules Modal -->
   <view wx:if="{{showCompetitionRulesModal}}" class="modal-overlay" bindtap="onCloseModal" data-modal="showCompetitionRulesModal">
     <view class="modal-content competition-rules-modal" catchtap="">
-      <competition-rules bind:close="onCloseCompetitionRulesModal" />
+      <competition-rules show="{{showCompetitionRulesModal}}" bind:close="onCloseCompetitionRulesModal" />
     </view>
   </view>
 
   <!-- Rewards Guide Modal -->
   <view wx:if="{{showRewardsGuideModal}}" class="modal-overlay" bindtap="onCloseModal" data-modal="showRewardsGuideModal">
     <view class="modal-content rewards-guide-modal" catchtap="">
-      <rewards-guide bind:close="onCloseRewardsGuideModal" />
+      <rewards-guide show="{{showRewardsGuideModal}}" bind:close="onCloseRewardsGuideModal" />
     </view>
   </view>
 

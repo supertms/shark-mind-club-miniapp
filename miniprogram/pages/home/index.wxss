@@ -545,7 +545,7 @@
 .location-guide-modal {
   max-width: 680rpx;
   max-height: 90vh;
-  height: 90vh;
+  height: 75vh;
   width: 90%;
   display: flex;
   flex-direction: column;
@@ -558,7 +558,7 @@
 .parking-guide-modal {
   max-width: 680rpx;
   max-height: 90vh;
-  height: 90vh;
+  height: 75vh;
   width: 90%;
   display: flex;
   flex-direction: column;
@@ -582,7 +582,7 @@
 .rewards-guide-modal {
   max-width: 680rpx;
   max-height: 90vh;
-  height: 90vh;
+  height: 75vh;
   width: 90%;
   display: flex;
   flex-direction: column;
@@ -595,7 +595,7 @@
 .competition-rules-modal {
   max-width: 680rpx;
   max-height: 90vh;
-  height: 90vh;
+  height: 75vh;
   width: 90%;
   display: flex;
   flex-direction: column;

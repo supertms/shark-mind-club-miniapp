@@ -10,7 +10,7 @@
   </view>
 
   <!-- Content -->
-  <scroll-view class="location-content-scroll" scroll-y="true" enable-back-to-top="true" scroll-with-animation="true" show-scrollbar="true" enhanced="true" enable-flex="true" style="height: {{scrollHeight}}rpx">
+  <scroll-view class="location-content-scroll" scroll-y="true" enable-back-to-top="true" scroll-with-animation="true" show-scrollbar="true" enhanced="true" style="height: {{scrollHeight}}rpx">
     <view class="location-content-wrapper">
       <!-- Contact & Address Info -->
       <view class="contact-info-card">
