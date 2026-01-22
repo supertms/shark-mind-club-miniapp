@@ -2,7 +2,7 @@
 const app = getApp();
 const { playerEvaluationsData, mockUser } = require('../../data/mockData');
 const { LoginToServer } = require('../../utils/login');
-const { GetPlayerInfo } = require('../../utils/player');
+const { GetPlayerInfo, UpdatePlayerAvatar } = require('../../utils/player');
 
 Page({
   data: {
@@ -274,5 +274,94 @@ Page({
   // 获取总评价数
   getTotalEvaluations: function () {
     return this.data.evaluations.reduce((sum, e) => sum + e.voters.length, 0);
+  },
+
+  // 处理头像选择
+  onChooseAvatar: async function (e) {
+    const { avatarUrl } = e.detail;
+    
+    if (!avatarUrl) {
+      console.error('未获取到头像URL');
+      return;
+    }
+
+    // 显示加载提示
+    wx.showLoading({
+      title: '更新头像中...',
+      mask: true
+    });
+
+    try {
+      // 先更新本地显示（立即反馈）
+      this.setData({
+        'user.avatar': avatarUrl
+      });
+
+      // 调用服务器接口更新头像
+      const updateRes = await UpdatePlayerAvatar(avatarUrl);
+      console.log('更新头像成功:', updateRes);
+
+      // 如果服务器返回了新的玩家信息，使用服务器数据
+      if (updateRes && updateRes.playerInfo) {
+        const playerInfo = updateRes.playerInfo;
+        const updatedUser = {
+          ...this.data.user,
+          avatar: playerInfo.showIconUrl || avatarUrl,
+          name: playerInfo.showName || this.data.user.name
+        };
+
+        this.setData({
+          user: updatedUser
+        });
+
+        // 更新全局状态
+        app.globalData.userInfo = updatedUser;
+
+        // 保存到本地存储
+        try {
+          wx.setStorageSync('userInfo', updatedUser);
+        } catch (e) {
+          console.error('保存用户信息失败:', e);
+        }
+      } else {
+        // 如果服务器没有返回新数据，只更新头像URL
+        const updatedUser = {
+          ...this.data.user,
+          avatar: avatarUrl
+        };
+
+        // 更新全局状态
+        app.globalData.userInfo = updatedUser;
+
+        // 保存到本地存储
+        try {
+          wx.setStorageSync('userInfo', updatedUser);
+        } catch (e) {
+          console.error('保存用户信息失败:', e);
+        }
+      }
+
+      wx.hideLoading();
+      wx.showToast({
+        title: '头像更新成功',
+        icon: 'success',
+        duration: 2000
+      });
+    } catch (err) {
+      console.error('更新头像失败:', err);
+      wx.hideLoading();
+      
+      // 恢复原来的头像
+      const originalAvatar = app.globalData.userInfo?.avatar || '';
+      this.setData({
+        'user.avatar': originalAvatar
+      });
+
+      wx.showToast({
+        title: '更新头像失败，请重试',
+        icon: 'none',
+        duration: 2000
+      });
+    }
   }
 });

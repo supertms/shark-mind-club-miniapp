@@ -30,6 +30,39 @@ function GetPlayerInfo() {
   return sendRequest(cmd, dataString);
 }
 
+/**
+ * 更新玩家头像
+ * @param {string} avatarUrl - 头像URL
+ * @returns {Promise} 返回更新后的玩家信息
+ */
+function UpdatePlayerAvatar(avatarUrl) {
+  // 构建请求数据（C2SUserEdit: editType=1表示修改头像）
+  const requestData = {
+    editType: 1,
+    StringValue: avatarUrl
+  };
+
+  // 将请求数据转换为JSON字符串
+  const dataString = JSON.stringify(requestData);
+  const cmd = '103';
+
+  // 打印请求信息（调试用）
+  console.log('更新玩家头像:', {
+    url: API_BASE_URL,
+    method: 'PUT',
+    contentType: 'application/x-www-form-urlencoded',
+    debugMode: IS_DEBUG_MODE,
+    formData: {
+      cmd: cmd,
+      data: dataString
+    },
+    avatarUrl: avatarUrl
+  });
+
+  return sendRequest(cmd, dataString);
+}
+
 module.exports = {
-  GetPlayerInfo
+  GetPlayerInfo,
+  UpdatePlayerAvatar
 };

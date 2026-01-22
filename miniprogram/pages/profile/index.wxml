@@ -4,10 +4,12 @@
     <!-- 用户信息头部 -->
     <view class="user-header">
       <view class="user-info">
-        <view class="avatar">
-          <image wx:if="{{user.avatar}}" class="avatar-image" src="{{user.avatar}}" mode="aspectFill" />
-          <text wx:else class="avatar-text">{{user.name[0]}}</text>
-        </view>
+        <button class="avatar-btn" open-type="chooseAvatar" bindchooseavatar="onChooseAvatar">
+          <view class="avatar">
+            <image wx:if="{{user.avatar}}" class="avatar-image" src="{{user.avatar}}" mode="aspectFill" />
+            <text wx:else class="avatar-text">{{user.name[0]}}</text>
+          </view>
+        </button>
         <view class="user-details">
           <text class="user-name">{{user.name}}</text>
           <view class="user-meta">
