@@ -1,0 +1,27 @@
+syntax = "proto3";
+
+option csharp_namespace = "PBNS";
+option java_package = "net.good321.proto";
+option java_outer_classname = "CommonMsg";
+
+// ----------------- 该协议获取热更新和强制更新 客户端唯一不支持的热更协议内容 ------------------
+
+// 基类客户端信息
+message BaseClientInfo {
+  int32 channel = 1; // 渠道号
+  int32 language = 2;//语言版本
+  string deviceName = 3; // 用户设备名, 如: 潘的iPhone
+  string deviceId = 4; // 设备号, 如: 1234567890123456789
+  int32 terminalType = 5;//设备类型 区分安卓,ios等  #device_type
+  string terminalInfo = 6; //设备型号 #device_model
+  string operatingSystem = 7; // 操作系统 #os
+  int32 clientVersion = 8;  //客户端代码版本号  #app_version
+}
+
+//推送协议:通用信息推送,一般是各自操作结果,cmd = COMMON_RESULT
+message CommonResultMsg {
+  int32 upCmdCode = 1; //触发本通知的上行操作协议号
+  int32 result = 2; //结果值, 0=成功, -1=通用错误码, 2=sessionId过期需要重新登录
+  string resultInfo = 3; //result=各种失败时,返回对应错误提示,已匹配多语言
+  int32 type = 4; //页面展示类型:1=普通错误类型，2=浮框
+}
