@@ -90,6 +90,22 @@
   display: block;
 }
 
+.user-name-input {
+  color: #ffffff;
+  font-size: 32rpx;
+  font-weight: 500;
+  margin-bottom: 8rpx;
+  padding: 0;
+  background: transparent;
+  border: none;
+  width: 100%;
+  line-height: 1.5;
+}
+
+.user-name-input::placeholder {
+  color: #6b7280;
+}
+
 .user-meta {
   display: flex;
   align-items: center;

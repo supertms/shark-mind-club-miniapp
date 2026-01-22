@@ -2,7 +2,7 @@
 const app = getApp();
 const { playerEvaluationsData, mockUser } = require('../../data/mockData');
 const { LoginToServer } = require('../../utils/login');
-const { GetPlayerInfo, UpdatePlayerAvatar } = require('../../utils/player');
+const { GetPlayerInfo, UpdatePlayerAvatar, UpdatePlayerNickname } = require('../../utils/player');
 
 Page({
   data: {
@@ -359,6 +359,105 @@ Page({
 
       wx.showToast({
         title: '更新头像失败，请重试',
+        icon: 'none',
+        duration: 2000
+      });
+    }
+  },
+
+  // 处理昵称输入失焦
+  onNicknameBlur: async function (e) {
+    const newNickname = (e.detail.value || '').trim();
+    await this.updateNickname(newNickname);
+  },
+
+  // 处理昵称输入确认
+  onNicknameConfirm: async function (e) {
+    const newNickname = (e.detail.value || '').trim();
+    await this.updateNickname(newNickname);
+  },
+
+  // 更新昵称的通用函数
+  updateNickname: async function (newNickname) {
+    // 如果昵称为空或与当前昵称相同，不处理
+    if (!newNickname || newNickname === this.data.user.name) {
+      return;
+    }
+
+    // 显示加载提示
+    wx.showLoading({
+      title: '更新昵称中...',
+      mask: true
+    });
+
+    try {
+      // 先更新本地显示（立即反馈）
+      this.setData({
+        'user.name': newNickname
+      });
+
+      // 调用服务器接口更新昵称
+      const updateRes = await UpdatePlayerNickname(newNickname);
+      console.log('更新昵称成功:', updateRes);
+
+      // 如果服务器返回了新的玩家信息，使用服务器数据
+      if (updateRes && updateRes.playerInfo) {
+        const playerInfo = updateRes.playerInfo;
+        const updatedUser = {
+          ...this.data.user,
+          name: playerInfo.showName || newNickname,
+          avatar: playerInfo.showIconUrl || this.data.user.avatar
+        };
+
+        this.setData({
+          user: updatedUser
+        });
+
+        // 更新全局状态
+        app.globalData.userInfo = updatedUser;
+
+        // 保存到本地存储
+        try {
+          wx.setStorageSync('userInfo', updatedUser);
+        } catch (e) {
+          console.error('保存用户信息失败:', e);
+        }
+      } else {
+        // 如果服务器没有返回新数据，只更新昵称
+        const updatedUser = {
+          ...this.data.user,
+          name: newNickname
+        };
+
+        // 更新全局状态
+        app.globalData.userInfo = updatedUser;
+
+        // 保存到本地存储
+        try {
+          wx.setStorageSync('userInfo', updatedUser);
+        } catch (e) {
+          console.error('保存用户信息失败:', e);
+        }
+      }
+
+      wx.hideLoading();
+      wx.showToast({
+        title: '昵称更新成功',
+        icon: 'success',
+        duration: 2000
+      });
+    } catch (err) {
+      console.error('更新昵称失败:', err);
+      wx.hideLoading();
+      
+      // 恢复原来的昵称
+      const originalName = app.globalData.userInfo?.name || '';
+      this.setData({
+        'user.name': originalName
+      });
+
+      wx.showToast({
+        title: '更新昵称失败，请重试',
         icon: 'none',
         duration: 2000
       });

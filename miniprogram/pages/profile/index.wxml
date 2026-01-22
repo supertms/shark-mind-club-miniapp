@@ -11,7 +11,15 @@
           </view>
         </button>
         <view class="user-details">
-          <text class="user-name">{{user.name}}</text>
+          <input 
+            class="user-name-input" 
+            type="nickname" 
+            value="{{user.name}}" 
+            placeholder="请输入昵称"
+            bindblur="onNicknameBlur"
+            bindconfirm="onNicknameConfirm"
+            maxlength="20"
+          />
           <view class="user-meta">
             <text class="user-id">ID: {{user.id}}</text>
             <button class="settings-btn" bindtap="onOpenSettings">
