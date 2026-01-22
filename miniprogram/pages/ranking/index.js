@@ -1,14 +1,13 @@
 // pages/ranking/index.js
 const app = getApp();
 const {
-  monthRankingData,
-  weekRankingData,
-  quarterRankingData,
-  yearRankingData,
-  winRateRankingData,
   playerEvaluationsData,
-  mockUser
+  mockUser,
+  weekRankingData,
+  monthRankingData,
+  winRateRankingData
 } = require('../../data/mockData');
+const { requestRankList, convertRankListData } = require('../../utils/api');
 
 Page({
   data: {
@@ -29,7 +28,16 @@ Page({
     currentUser: mockUser,
 
     // UI状态
-    loading: false
+    loading: false,
+
+    // 缓存数据
+    cachedRankings: {
+      week: [],
+      month: [],
+      quarter: [],
+      year: [],
+      winRate: []
+    }
   },
 
   onLoad: function (options) {
@@ -43,60 +51,185 @@ Page({
       currentUser: globalData.userInfo || mockUser,
       isLoggedIn: globalData.isLoggedIn || false
     });
-    this.updateRankings();
+    this.loadRankings();
   },
 
   // 初始化页面数据
   initializeData: function () {
-    this.updateRankings();
+    this.loadRankings();
   },
 
-  // 更新排行榜数据
-  updateRankings: function () {
-    const rankings = this.getCurrentRankings();
-    const myRankingData = rankings.find(user => user.id === this.data.currentUser.id);
-    const myRank = myRankingData ? myRankingData.rank : null;
-    const isInTop50 = myRank && myRank <= 50;
+  // 将小程序 tab 映射到服务器 rankType
+  getRankTypeForTab: function (tab) {
+    const mapping = {
+      'week': 1,      // WEEK
+      'month': 2,     // MONTH
+      'quarter': 2,   // 季度也用 MONTH，可能需要根据实际需求调整
+      'year': 2,      // 年度也用 MONTH，可能需要根据实际需求调整
+      'winRate': 4    // WIN (胜率榜)
+    };
+    return mapping[tab] || 1;
+  },
 
-    // 为每个排行榜项添加评价标签和格式化数据
-    const rankingsWithEvaluations = rankings.map(item => ({
-      ...item,
-      evaluationTags: this.getPlayerEvaluations(item.id),
-      allowEvaluation: this.isEvaluationAllowed(item.id),
-      formattedPoints: item.points.toLocaleString()
-    }));
+  // 从服务器加载排行榜数据
+  loadRankings: function () {
+    const { selectedTab, cachedRankings } = this.data;
+    
+    // 如果已有缓存数据，先显示缓存
+    if (cachedRankings[selectedTab] && cachedRankings[selectedTab].length > 0) {
+      this.updateRankings(cachedRankings[selectedTab]);
+    }
+
+    // 设置加载状态
+    this.setData({
+      loading: true
+    });
+
+    // 获取对应的 rankType
+    const rankType = this.getRankTypeForTab(selectedTab);
+
+    // 请求服务器数据
+    requestRankList({
+      rankType: rankType,
+      page: 1,
+      pageNum: 100,
+      season: 0
+    }).then((serverData) => {
+      // 转换数据格式
+      const convertedData = convertRankListData(serverData);
+      const rankings = convertedData.rankList || [];
+
+      // 更新缓存
+      const newCachedRankings = { ...cachedRankings };
+      newCachedRankings[selectedTab] = rankings;
+
+      // 更新页面数据
+      this.setData({
+        cachedRankings: newCachedRankings,
+        loading: false
+      });
+
+      // 处理我的排名
+      this.processMyRanking(convertedData.myRankIndex, rankings);
+
+      // 更新排行榜显示
+      this.updateRankings(rankings);
+    }).catch((error) => {
+      console.error('加载排行榜失败:', error);
+      
+      this.setData({
+        loading: false
+      });
+
+      // 如果加载失败，尝试使用缓存数据
+      if (cachedRankings[selectedTab] && cachedRankings[selectedTab].length > 0) {
+        console.log('使用缓存数据');
+        this.updateRankings(cachedRankings[selectedTab]);
+        return;
+      }
+
+      // 如果缓存也没有，使用模拟数据作为降级方案
+      console.log('使用模拟数据作为降级方案');
+      let fallbackData = [];
+      switch (selectedTab) {
+        case 'week':
+          fallbackData = weekRankingData || [];
+          break;
+        case 'month':
+          fallbackData = monthRankingData || [];
+          break;
+        case 'winRate':
+          fallbackData = winRateRankingData || [];
+          break;
+        default:
+          fallbackData = weekRankingData || [];
+      }
+      
+      if (fallbackData.length > 0) {
+        this.updateRankings(fallbackData);
+        wx.showToast({
+          title: '使用离线数据',
+          icon: 'none',
+          duration: 2000
+        });
+      } else {
+        // 显示错误信息
+        wx.showModal({
+          title: '加载失败',
+          content: error.message || '获取排行榜数据失败，请稍后重试',
+          showCancel: false,
+          confirmText: '确定'
+        });
+      }
+    });
+  },
+
+  // 处理我的排名数据
+  processMyRanking: function (myRankIndex, rankings) {
+    const { currentUser, selectedTab } = this.data;
+    let myRankingData = null;
+    let myRank = null;
+    let isInTop50 = false;
+
+    if (myRankIndex > 0) {
+      // 在榜单中找到我的排名数据
+      myRankingData = rankings.find(user => user.id === currentUser.id.toString());
+      myRank = myRankIndex;
+      isInTop50 = myRankIndex <= 50;
+    } else if (myRankIndex === 0) {
+      // 未上榜
+      myRank = null;
+      isInTop50 = false;
+    } else {
+      // myRankIndex === -1，未登录
+      myRank = null;
+      isInTop50 = false;
+    }
 
     // 格式化我的排名数据
     const formattedMyRankingData = myRankingData ? {
       ...myRankingData,
-      formattedPoints: myRankingData.points.toLocaleString()
+      formattedPoints: myRankingData.points ? myRankingData.points.toLocaleString() : '0',
+      formattedWinRate: myRankingData.winRate ? myRankingData.winRate.toFixed(1) : '0.0'
     } : null;
 
     this.setData({
-      rankings: rankingsWithEvaluations,
       myRankingData: formattedMyRankingData,
       myRank: myRank,
       isInTop50: isInTop50
     });
   },
 
-  // 获取当前选中的榜单数据
-  getCurrentRankings: function () {
-    const { selectedTab } = this.data;
-    switch (selectedTab) {
-      case 'week':
-        return weekRankingData;
-      case 'month':
-        return monthRankingData;
-      case 'quarter':
-        return quarterRankingData;
-      case 'year':
-        return yearRankingData;
-      case 'winRate':
-        return winRateRankingData;
-      default:
-        return weekRankingData;
+  // 更新排行榜显示
+  updateRankings: function (rankings) {
+    if (!rankings || rankings.length === 0) {
+      this.setData({
+        rankings: []
+      });
+      return;
     }
+
+    // 为每个排行榜项添加评价标签和格式化数据
+    const rankingsWithEvaluations = rankings.map(item => {
+      // 确保 winRate 是数字类型
+      const winRate = typeof item.winRate === 'number' ? item.winRate : (item.winRate ? Number(item.winRate) : 0);
+      // 确保 points 是数字类型
+      const points = typeof item.points === 'number' ? item.points : (item.points ? Number(item.points) : 0);
+      
+      return {
+        ...item,
+        winRate: winRate, // 确保是数字类型
+        points: points,   // 确保是数字类型
+        evaluationTags: this.getPlayerEvaluations(item.id),
+        allowEvaluation: this.isEvaluationAllowed(item.id),
+        formattedPoints: points ? points.toLocaleString() : '0',
+        formattedWinRate: winRate ? winRate.toFixed(1) : '0.0'
+      };
+    });
+
+    this.setData({
+      rankings: rankingsWithEvaluations
+    });
   },
 
   // 检查玩家是否允许被评价
@@ -123,7 +256,8 @@ Page({
     this.setData({
       selectedTab: tab
     });
-    this.updateRankings();
+    // 重新加载数据
+    this.loadRankings();
   },
 
   // 显示榜单说明

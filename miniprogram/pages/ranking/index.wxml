@@ -87,7 +87,7 @@
 
             <!-- 积分/进圈率显示 -->
             <view wx:if="{{selectedTab === 'winRate'}}" class="stats-row">
-              <text class="points-text">进圈率 {{item.winRate}}%</text>
+              <text class="points-text">进圈率 {{item.winRate/100}}%</text>
               <text class="games-text">{{item.games}}局</text>
             </view>
             <view wx:else class="points-container">
