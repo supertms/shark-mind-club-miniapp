@@ -1,6 +1,7 @@
 // pages/profile/index.js
 const app = getApp();
 const { playerEvaluationsData, mockUser } = require('../../data/mockData');
+const { LoginToServer } = require('../../utils/login');
 
 Page({
   data: {
@@ -116,6 +117,20 @@ Page({
       }
 
       console.log('获取登录凭证成功:', loginRes.code);
+
+      // 调用服务器登录接口
+      const serverRes = await LoginToServer(loginRes.code);
+      console.log('服务器登录响应:', serverRes);
+      
+      // 保存 sessionId（如果服务器返回了）
+      if (serverRes && serverRes.sessionId) {
+        app.globalData.sessionId = serverRes.sessionId;
+        try {
+          wx.setStorageSync('sessionId', serverRes.sessionId);
+        } catch (e) {
+          console.error('保存sessionId失败:', e);
+        }
+      }
 
       // 构建用户数据
       const userData = {

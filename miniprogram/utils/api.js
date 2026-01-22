@@ -1,7 +1,7 @@
 // utils/api.js
 // API 请求工具
 
-const API_BASE_URL = 'http://127.0.0.1:6999/game';
+const { API_BASE_URL, sendRequest } = require('./request');
 
 // 开发模式配置
 // 注意：微信开发者工具对本地 IP 的 HTTP 请求可能返回 502 错误
@@ -41,74 +41,6 @@ function getRankTypeNumber(rankTypeEnum) {
   return mapping[rankTypeEnum] || 1;
 }
 
-/**
- * 发送 PUT 请求（form格式）
- * @param {number} cmd - 命令号
- * @param {string} data - 数据（JSON字符串）
- * @returns {Promise} 返回 Promise
- */
-function sendRequest(cmd, data) {
-  return new Promise((resolve, reject) => {
-    wx.request({
-      url: API_BASE_URL,
-      method: 'PUT',
-      header: {
-        'Content-Type': 'application/x-www-form-urlencoded'
-      },
-      // 以form格式提交，cmd和data作为表单字段
-      data: {
-        cmd: cmd,
-        data: data
-      },
-      timeout: 10000,
-      enableHttp2: false,
-      enableQuic: false,
-      success: function(res) {
-        console.log('[PUT] 服务器响应:', res);
-        
-        // 检查 HTTP 状态码
-        if (res.statusCode !== 200) {
-          reject({
-            code: res.statusCode,
-            message: `HTTP错误 ${res.statusCode}: 请求失败`
-          });
-          return;
-        }
-
-        // 检查返回的 code
-        if (res.data && res.data.code === 0) {
-          // 成功，解析 data 字段
-          try {
-            const rankData = JSON.parse(res.data.data);
-            console.log('解析后的排行榜数据:', rankData);
-            resolve(rankData);
-          } catch (e) {
-            console.error('解析数据失败:', e);
-            reject({
-              code: -1,
-              message: '解析服务器返回数据失败: ' + e.message
-            });
-          }
-        } else {
-          // 错误，显示错误信息
-          const errorCode = res.data ? res.data.code : '未知';
-          console.error('服务器返回错误:', res.data);
-          reject({
-            code: errorCode,
-            message: '服务器返回错误，错误码: ' + errorCode
-          });
-        }
-      },
-      fail: function(err) {
-        console.error('[PUT] 请求失败:', err);
-        reject({
-          code: -1,
-          errMsg: err.errMsg || '未知错误'
-        });
-      }
-    });
-  });
-}
 
 /**
  * 发送排行榜请求
