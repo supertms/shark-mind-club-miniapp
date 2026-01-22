@@ -6,7 +6,6 @@ Page({
   data: {
     // 页面状态
     isLoggedIn: false,
-    showLoginModal: false,
     showSettingsModal: false,
 
     // 用户数据
@@ -26,10 +25,33 @@ Page({
   onShow: function () {
     // 从全局状态同步数据
     const globalData = app.globalData;
-    this.setData({
-      user: globalData.userInfo || mockUser,
-      isLoggedIn: globalData.isLoggedIn || false
-    });
+    
+    // 尝试从本地存储恢复登录状态
+    try {
+      const savedUserInfo = wx.getStorageSync('userInfo');
+      const savedIsLoggedIn = wx.getStorageSync('isLoggedIn');
+      
+      if (savedUserInfo && savedIsLoggedIn) {
+        this.setData({
+          user: savedUserInfo,
+          isLoggedIn: true
+        });
+        app.globalData.userInfo = savedUserInfo;
+        app.globalData.isLoggedIn = true;
+      } else {
+        this.setData({
+          user: globalData.userInfo || mockUser,
+          isLoggedIn: globalData.isLoggedIn || false
+        });
+      }
+    } catch (e) {
+      console.error('读取本地存储失败:', e);
+      this.setData({
+        user: globalData.userInfo || mockUser,
+        isLoggedIn: globalData.isLoggedIn || false
+      });
+    }
+    
     this.updateEvaluations();
   },
 
@@ -59,35 +81,95 @@ Page({
     return diffHours >= 24;
   },
 
-  // 处理登录按钮点击
-  onLoginClick: function () {
-    this.setData({
-      showLoginModal: true
+
+  // 处理登录按钮点击 - 使用 getUserProfile
+  onLoginClick: async function () {
+    // 显示加载提示
+    wx.showLoading({
+      title: '登录中...',
+      mask: true
     });
+
+    try {
+      // 先获取用户信息（必须在用户点击时直接调用）
+      const userRes = await new Promise((resolve, reject) => {
+        wx.getUserProfile({
+          desc: '用于完善用户资料',
+          success: resolve,
+          fail: reject
+        });
+      });
+
+      console.log('获取用户信息成功:', userRes);
+      const userInfo = userRes.userInfo;
+
+      // 获取微信登录凭证 code
+      const loginRes = await new Promise((resolve, reject) => {
+        wx.login({
+          success: resolve,
+          fail: reject
+        });
+      });
+
+      if (!loginRes.code) {
+        throw new Error('获取登录凭证失败');
+      }
+
+      console.log('获取登录凭证成功:', loginRes.code);
+
+      // 构建用户数据
+      const userData = {
+        id: this.data.user.id || 'user_' + Date.now(),
+        name: userInfo.nickName || '微信用户',
+        avatar: userInfo.avatarUrl || '',
+        phone: this.data.user.phone || '',
+        points: this.data.user.points || 0,
+        balance: this.data.user.balance || 0,
+        coins: this.data.user.coins || 0,
+        allowEvaluation: this.data.user.allowEvaluation !== undefined ? this.data.user.allowEvaluation : true,
+        lastEvaluationSettingTime: this.data.user.lastEvaluationSettingTime || null
+      };
+
+      // 更新页面数据
+      this.setData({
+        isLoggedIn: true,
+        user: userData
+      });
+
+      // 更新全局状态
+      app.globalData.isLoggedIn = true;
+      app.globalData.userInfo = userData;
+
+      // 保存到本地存储
+      try {
+        wx.setStorageSync('userInfo', userData);
+        wx.setStorageSync('isLoggedIn', true);
+      } catch (e) {
+        console.error('保存用户信息失败:', e);
+      }
+
+      wx.hideLoading();
+      wx.showToast({
+        title: '登录成功',
+        icon: 'success',
+        duration: 2000
+      });
+    } catch (err) {
+      console.error('登录失败:', err);
+      wx.hideLoading();
+      
+      const errorMessage = err.errMsg && err.errMsg.includes('getUserProfile') 
+        ? '需要授权才能登录' 
+        : '登录失败，请重试';
+      
+      wx.showToast({
+        title: errorMessage,
+        icon: 'none',
+        duration: 2000
+      });
+    }
   },
 
-  // 确认登录
-  onLoginConfirm: function () {
-    this.setData({
-      showLoginModal: false,
-      isLoggedIn: true
-    });
-
-    // 更新全局状态
-    app.globalData.isLoggedIn = true;
-
-    wx.showToast({
-      title: '登录成功',
-      icon: 'success'
-    });
-  },
-
-  // 关闭登录模态框
-  onCloseLoginModal: function () {
-    this.setData({
-      showLoginModal: false
-    });
-  },
 
   // 打开设置模态框
   onOpenSettings: function () {

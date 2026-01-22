@@ -5,7 +5,8 @@
     <view class="user-header">
       <view class="user-info">
         <view class="avatar">
-          <text class="avatar-text">{{user.name[0]}}</text>
+          <image wx:if="{{user.avatar}}" class="avatar-image" src="{{user.avatar}}" mode="aspectFill" />
+          <text wx:else class="avatar-text">{{user.name[0]}}</text>
         </view>
         <view class="user-details">
           <text class="user-name">{{user.name}}</text>
@@ -128,23 +129,6 @@
         <text class="login-text">登录</text>
         <text class="login-icon">🔑</text>
       </button>
-    </view>
-  </view>
-
-
-  <!-- 微信登录模态框 -->
-  <view wx:if="{{showLoginModal}}" class="modal-overlay" bindtap="onCloseLoginModal">
-    <view class="modal-content login-modal" catchtap="">
-      <view class="modal-header">
-        <text class="modal-title">微信登录</text>
-        <text class="modal-close" bindtap="onCloseLoginModal">✕</text>
-      </view>
-      <view class="modal-body">
-        <text class="login-message">登录后即可享受完整功能</text>
-        <button class="wechat-login-btn" bindtap="onLoginConfirm">
-          <text>微信一键登录</text>
-        </button>
-      </view>
     </view>
   </view>
 
