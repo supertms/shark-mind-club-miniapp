@@ -1,20 +1,31 @@
 <view class="container">
   <!-- 主内容区域 -->
   <view class="main-content">
-    <!-- Welcome Section -->
-    <view class="welcome-section">
-      <!-- Logo and Welcome -->
-      <view class="logo-section">
-        <image class="logo" src="/assets/logo.webp" mode="aspectFit" />
-        <text class="welcome-text">欢迎加入 鲨曼 Shark Mind Club</text>
-        <view class="divider"></view>
-        <text class="description">
-          本俱乐部采取线下快速锦标赛模式，所有奖励均为无价值奖励，不可兑换不可销售，拒绝赌博，绿色竞技
-        </text>
-      </view>
+      <!-- Welcome Section -->
+      <view class="welcome-section">
+        <!-- Logo and Welcome -->
+        <view class="logo-section">
+          <image class="logo" src="/assets/logo.webp" mode="aspectFit" />
+          <text class="welcome-text">欢迎加入 鲨曼 Shark Mind Club</text>
+          <view class="divider"></view>
+          <text class="description">
+            本俱乐部采取线下快速锦标赛模式，所有奖励均为无价值奖励，不可兑换不可销售，拒绝赌博，绿色竞技
+          </text>
+        </view>
 
-      <!-- Main Action Cards -->
-      <scroll-view class="action-cards" scroll-y="true">
+        <!-- 公告区域 -->
+        <view wx:if="{{notices.length > 0}}" class="notices-section">
+          <view wx:for="{{notices}}" wx:key="index" class="notice-item">
+            <view class="notice-header">
+              <text class="notice-icon">📢</text>
+              <text class="notice-title">{{item.title}}</text>
+            </view>
+            <text class="notice-content">{{item.content}}</text>
+          </view>
+        </view>
+
+        <!-- Main Action Cards -->
+        <scroll-view class="action-cards" scroll-y="true">
         <!-- 扫码上桌按钮 - 仅登录后显示 -->
         <view wx:if="{{isLoggedIn}}" class="scan-card" bindtap="onScanCode">
           <view class="scan-content">

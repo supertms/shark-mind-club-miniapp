@@ -6,6 +6,7 @@ const {
   weekRankingData,
   mockUser
 } = require('../../data/mockData');
+const { GetNoticeList } = require('../../utils/notice');
 
 Page({
   data: {
@@ -30,6 +31,7 @@ Page({
     // 页面数据
     events: [],
     topPlayer: null,
+    notices: [], // 公告列表
 
     // UI状态
     loading: false
@@ -65,6 +67,9 @@ Page({
 
     // 同步全局状态
     this.updateData();
+
+    // 加载公告列表
+    this.loadNotices();
   },
 
   // 更新页面数据
@@ -529,6 +534,30 @@ Page({
     });
   },
 
+
+  // 加载公告列表
+  loadNotices: async function () {
+    try {
+      const noticeRes = await GetNoticeList();
+      console.log('获取公告列表成功:', noticeRes);
+      
+      // 服务器返回的是 S2CGetNotice，包含 noticeList 字段
+      const noticeList = noticeRes.noticeList || [];
+      
+      // 只显示大厅公告（type=0）
+      const hallNotices = noticeList.filter(notice => notice.type === 0);
+      
+      this.setData({
+        notices: hallNotices
+      });
+    } catch (err) {
+      console.error('获取公告列表失败:', err);
+      // 失败时不影响页面显示，静默处理
+      this.setData({
+        notices: []
+      });
+    }
+  },
 
   // 显示Toast提示
   showToast: function (message, type = 'success') {
