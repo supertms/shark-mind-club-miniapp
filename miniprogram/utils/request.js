@@ -21,9 +21,17 @@ function sendRequest(cmd, dataString) {
     wx.request({
       url: API_BASE_URL,
       method: 'PUT',
-      header: {
-        'Content-Type': 'application/x-www-form-urlencoded'
-      },
+      header: (function() {
+        const app = getApp();
+        const headers = {
+          'Content-Type': 'application/x-www-form-urlencoded'
+        };
+        // 如果有 sessionId，添加到请求头
+        if (app.globalData.sessionId) {
+          headers['sessionId'] = app.globalData.sessionId;
+        }
+        return headers;
+      })(),
       // 以form格式提交，cmd和data作为表单字段
       data: {
         cmd: cmd,

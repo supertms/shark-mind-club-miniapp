@@ -2,6 +2,7 @@
 const app = getApp();
 const { playerEvaluationsData, mockUser } = require('../../data/mockData');
 const { LoginToServer } = require('../../utils/login');
+const { GetPlayerInfo } = require('../../utils/player');
 
 Page({
   data: {
@@ -132,15 +133,33 @@ Page({
         }
       }
 
-      // 构建用户数据
+      // 向服务器获取玩家信息
+      const playerRes = await GetPlayerInfo();
+      console.log('获取玩家信息成功:', playerRes);
+      
+      // 解析服务器返回的 PlayerInfo（服务器返回的是 S2CGetPlayerInfo，包含 playerInfo 字段）
+      const playerInfo = playerRes.playerInfo || {};
+      
+      // 将 winPer（万分比）转换为百分比（用于显示）
+      const winRate = playerInfo.winPer != null ? (Number(playerInfo.winPer) / 100).toFixed(2) : 0;
+
+      // 构建用户数据（优先使用服务器返回的数据）
       const userData = {
-        id: this.data.user.id || 'user_' + Date.now(),
-        name: userInfo.nickName || '微信用户',
-        avatar: userInfo.avatarUrl || '',
+        id: playerInfo.uid ? playerInfo.uid.toString() : (this.data.user.id || 'user_' + Date.now()),
+        name: playerInfo.showName || userInfo.nickName || '微信用户',
+        avatar: playerInfo.showIconUrl || userInfo.avatarUrl || '',
         phone: this.data.user.phone || '',
-        points: this.data.user.points || 0,
+        points: playerInfo.monthScore ? Number(playerInfo.monthScore) : (this.data.user.points || 0),
         balance: this.data.user.balance || 0,
         coins: this.data.user.coins || 0,
+        // 服务器返回的积分数据
+        dayScore: playerInfo.dayScore ? Number(playerInfo.dayScore) : 0,
+        weekScore: playerInfo.weekScore ? Number(playerInfo.weekScore) : 0,
+        monthScore: playerInfo.monthScore ? Number(playerInfo.monthScore) : 0,
+        winPer: playerInfo.winPer ? Number(playerInfo.winPer) : 0, // 万分比格式
+        winRate: winRate, // 百分比格式（用于显示）
+        createTime: playerInfo.createTime || null,
+        // 评价相关设置
         allowEvaluation: this.data.user.allowEvaluation !== undefined ? this.data.user.allowEvaluation : true,
         lastEvaluationSettingTime: this.data.user.lastEvaluationSettingTime || null
       };
