@@ -41,10 +41,10 @@ message PlayerInfo {
   string showName = 2;  //昵称,应该是社交平台的昵称吧
   string showIconUrl = 3; //社交平台的个人图标---有些时候可能是第三方服务器的一个url
   string createTime = 4;//创建时间,格式:yyyy-MM-dd HH:mm:ss
-  int64 dayScore = 5;//当日积分
-  int64 weekScore = 6;//当周积分
-  int64 monthScore = 7;//当月积分
-  int32 winPer = 8;//获取入圈率的万分比格式,0~10000,如50%返回5000,100%返回10000
+  map<string, int64> rankScore = 5;//各排行榜积分,key=RankTypeEnum.name,value=积分
+  int32 winPer = 6;//获取入圈率的万分比格式,0~10000,如50%返回5000,100%返回10000
+  bool commentsSwitch = 7;//点评开关:true=开启
+  map<int32, int32> comments = 8;//点评信息,key=评论定义Id,value=次数
 }
 
 // 协议对:获取玩家信息,cmd=USER_INFO
@@ -56,7 +56,7 @@ message S2CGetPlayerInfo {
 
 // 协议对:修改玩家昵称等信息,cmd=USER_EDIT
 message C2SUserEdit {
-  int32 editType = 1;//修改类型,0=修改昵称,1=修改头像,2=修改电话号码
+  int32 editType = 1;//修改类型,0=修改昵称,1=修改头像,2=修改电话号码,3=修改点评开关
   string StringValue = 2;  //根据类型发送对应参数
 }
 message S2CUserEdit {
@@ -74,4 +74,13 @@ message C2SGetNotice {
 }
 message S2CGetNotice {
   repeated Notice noticeList = 1;//公告列表
+}
+
+// 协议对:点评别人,cmd=COMMENT
+message C2SComment {
+  int64 uid = 1; //被点评的玩家id
+  int32 defineId = 2;//点评定义Id
+}
+message S2CComment {
+  //必定成功,但是可能因为cd控制而被忽略
 }

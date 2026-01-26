@@ -14,5 +14,7 @@ enum CmdCode
   USER_EDIT = 103;    //修改玩家信息
   NOTICE_GET_LIST = 104; //获取公告列表
   RANK_GET_LIST = 105; //获取排行榜列表
+  DEFINE_GET_LIST = 106; //获取各种定义列表:评论定义/
+  COMMENT = 107; //点评别人
 
 }

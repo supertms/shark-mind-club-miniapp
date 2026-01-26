@@ -25,3 +25,10 @@ message CommonResultMsg {
   string resultInfo = 3; //result=各种失败时,返回对应错误提示,已匹配多语言
   int32 type = 4; //页面展示类型:1=普通错误类型，2=浮框
 }
+
+//协议对:获取各种定义列表,cmd=DEFINE_GET_LIST
+message C2SDefineGetList {
+}
+message S2CDefineGetList {
+  map<int32, string> commentsDefines = 1;//key=枚举值,value=枚举值对应的中文描述
+}

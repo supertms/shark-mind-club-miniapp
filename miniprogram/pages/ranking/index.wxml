@@ -106,6 +106,18 @@
                 <text class="tag-count">{{evaluationTag.voters.length}}</text>
               </view>
             </view>
+            <!-- 评论标签（从服务器获取） -->
+            <view wx:if="{{item.commentTags && item.commentTags.length > 0}}" class="evaluation-tags">
+              <view
+                wx:for="{{item.commentTags}}"
+                wx:for-item="commentTag"
+                wx:key="id"
+                class="evaluation-tag"
+              >
+                <text class="tag-type">{{commentTag.type}}</text>
+                <text class="tag-count">{{commentTag.count}}</text>
+              </view>
+            </view>
           </view>
 
           <!-- 评价按钮 -->

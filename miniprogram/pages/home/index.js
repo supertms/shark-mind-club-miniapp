@@ -7,6 +7,7 @@ const {
   mockUser
 } = require('../../data/mockData');
 const { GetNoticeList } = require('../../utils/notice');
+const { GetDefineList } = require('../../utils/RankCommentDef');
 
 Page({
   data: {
@@ -32,6 +33,7 @@ Page({
     events: [],
     topPlayer: null,
     notices: [], // 公告列表
+    commentsDefines: {}, // 评论定义映射表，key=枚举值, value=中文描述
 
     // UI状态
     loading: false
@@ -70,6 +72,9 @@ Page({
 
     // 加载公告列表
     this.loadNotices();
+
+    // 加载定义列表
+    this.loadDefineList();
   },
 
   // 更新页面数据
@@ -557,6 +562,27 @@ Page({
         notices: []
       });
     }
+  },
+
+  // 加载定义列表
+  loadDefineList: function () {
+    GetDefineList().then((responseData) => {
+      // 服务器返回的数据格式：{ commentsDefines: { "1": "描述1", "2": "描述2", ... } }
+      const commentsDefines = responseData.commentsDefines || {};
+      
+      console.log('获取定义列表成功:', commentsDefines);
+      
+      // 保存到页面数据
+      this.setData({
+        commentsDefines: commentsDefines
+      });
+      
+      // 同时保存到全局数据，供其他页面使用
+      app.globalData.commentsDefines = commentsDefines;
+    }).catch((error) => {
+      console.error('获取定义列表失败:', error);
+      // 失败时不显示错误提示，静默处理
+    });
   },
 
   // 显示Toast提示

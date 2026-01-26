@@ -117,7 +117,9 @@ function convertRankInfo(rankInfo, rankType) {
     games: playerCount,
     winRate: isWinRateRank ? rankValue : 0, // 胜率榜使用 rankValue 作为胜率，确保是数字类型
     lastRank: rankInfo.lastRankIndex || null,
-    avatar: rankInfo.fansIcon || '' // 头像
+    avatar: rankInfo.fansIcon || '', // 头像
+    commentsSwitch: rankInfo.commentsSwitch !== undefined ? rankInfo.commentsSwitch : true, // 是否可以点评
+    comments: rankInfo.comments || {} // 点评信息，key=评论定义Id，value=次数
   };
 }
 

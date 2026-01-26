@@ -51,6 +51,12 @@ Page({
       currentUser: globalData.userInfo || mockUser,
       isLoggedIn: globalData.isLoggedIn || false
     });
+    
+    // 如果全局数据中有 commentsDefines，重新处理排行榜数据
+    if (globalData.commentsDefines && this.data.rankings.length > 0) {
+      this.updateRankings(this.data.rankings);
+    }
+    
     this.loadRankings();
   },
 
@@ -209,6 +215,9 @@ Page({
       return;
     }
 
+    // 获取评论定义映射表（从全局数据或页面数据）
+    const commentsDefines = app.globalData.commentsDefines || {};
+
     // 为每个排行榜项添加评价标签和格式化数据
     const rankingsWithEvaluations = rankings.map(item => {
       // 确保 winRate 是数字类型
@@ -216,12 +225,32 @@ Page({
       // 确保 points 是数字类型
       const points = typeof item.points === 'number' ? item.points : (item.points ? Number(item.points) : 0);
       
+      // 处理 comments，将评论定义Id转换为中文描述
+      const commentTags = [];
+      if (item.comments && typeof item.comments === 'object') {
+        Object.keys(item.comments).forEach(commentId => {
+          const commentCount = item.comments[commentId];
+          const commentText = commentsDefines[commentId] || `评论${commentId}`;
+          if (commentCount > 0) {
+            commentTags.push({
+              id: commentId,
+              type: commentText,
+              count: commentCount
+            });
+          }
+        });
+        // 按次数排序，取前3个
+        commentTags.sort((a, b) => b.count - a.count);
+        commentTags.splice(3);
+      }
+      
       return {
         ...item,
         winRate: winRate, // 确保是数字类型
         points: points,   // 确保是数字类型
         evaluationTags: this.getPlayerEvaluations(item.id),
-        allowEvaluation: this.isEvaluationAllowed(item.id),
+        commentTags: commentTags, // 评论标签（从服务器获取）
+        allowEvaluation: item.commentsSwitch !== undefined ? item.commentsSwitch : this.isEvaluationAllowed(item.id),
         formattedPoints: points ? points.toLocaleString() : '0',
         formattedWinRate: winRate ? winRate.toFixed(1) : '0.0'
       };

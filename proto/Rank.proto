@@ -4,15 +4,6 @@ option csharp_namespace = "PBNS";
 option java_package = "net.good321.proto";
 option java_outer_classname = "RankMsg";
 
-// 排行榜类型枚举定义
-enum RankTypeEnum {
-  NONE_RANK_TYPE = 0; //未知
-  WEEK = 1; // 周榜
-  MONTH = 2;  // 月榜
-  DAY = 3;  // 日榜
-  WIN = 4;  // 胜率榜
-}
-
 message RankInfo {
   int32 rankIndex = 1; //排名(从1开始)
   int64 uid = 2;  //观众id
@@ -21,20 +12,20 @@ message RankInfo {
   int64 rankValue = 5;  //排名值
   int64 playerCount = 6; //对应参赛场数
   int32 lastRankIndex = 7; // 上一次排名
+
+  bool commentsSwitch = 8;//是否可以点评
+  map<int32, int32> comments = 9;//点评信息,key=评论定义Id,value=次数
 }
-rankType = WEEK
-page =1
-pageNum =100
-season = 0
+
 //协议对:获取排行榜信息,cmd=RANK_GET_LIST,可以不登录,但是需要获取自己排名时需先登录
 message C2SRankGetList {
-  RankTypeEnum rankType = 1;  //排行榜类型
+  string rankType = 1;  //排行榜类型
   int32 page = 2;  //页码 >= 1
   int32 pageNum = 3; //每页数量
   int32 season = 4; // 赛季号，0=等于当前赛季号，不能大于当前赛季号
 }
 message S2CRankGetList {
-  RankTypeEnum rankType = 1; //排行榜类型
+  string rankType = 1; //排行榜类型
   repeated RankInfo rankList = 2; //排行列表
   int32 totalNum = 3; //榜单总长度
   int32 newSeason = 4; // 当前rankType的最新赛季号
