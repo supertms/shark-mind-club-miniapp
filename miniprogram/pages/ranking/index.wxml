@@ -121,7 +121,7 @@
           </view>
 
           <!-- 评价按钮 -->
-          <view wx:if="{{isLoggedIn && item.allowEvaluation}}" class="action-area">
+          <view wx:if="{{isLoggedIn && item.commentsSwitch}}" class="action-area">
             <button
               class="evaluate-btn"
               bindtap="onSelectPlayer"

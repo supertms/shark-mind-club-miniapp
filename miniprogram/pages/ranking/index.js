@@ -349,7 +349,8 @@ Page({
       return;
     }
     
-    if (!this.isEvaluationAllowed(player.id)) {
+    // 检查玩家是否允许被评价（使用 commentsSwitch 字段）
+    if (player.commentsSwitch === false) {
       wx.showToast({
         title: '该玩家不允许评价',
         icon: 'none'
