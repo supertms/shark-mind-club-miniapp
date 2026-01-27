@@ -2,7 +2,7 @@
 const app = getApp();
 const { playerEvaluationsData, mockUser } = require('../../data/mockData');
 const { LoginToServer } = require('../../utils/login');
-const { GetPlayerInfo, UpdatePlayerAvatar, UpdatePlayerNickname } = require('../../utils/player');
+const { GetPlayerInfo, UpdatePlayerAvatar, UpdatePlayerNickname, UpdatePlayerCommentsSwitch } = require('../../utils/player');
 
 Page({
   data: {
@@ -55,6 +55,11 @@ Page({
     }
     
     this.updateEvaluations();
+    
+    // 如果全局数据中有 commentsDefines，重新更新评价数据
+    if (app.globalData.commentsDefines && this.data.user.comments) {
+      this.updateEvaluations();
+    }
   },
 
   // 初始化页面数据
@@ -64,13 +69,41 @@ Page({
 
   // 更新评价数据
   updateEvaluations: function () {
-    const myEvaluations = playerEvaluationsData[this.data.user.id] || [];
-    // 只显示有点赞的评价，按点赞数量降序排序
-    const evaluationsWithVotes = myEvaluations.filter(e => e.voters.length > 0);
-    const sortedEvaluations = evaluationsWithVotes.sort((a, b) => b.voters.length - a.voters.length);
+    const user = this.data.user;
+    const commentsDefines = app.globalData.commentsDefines || {};
+    
+    // 优先使用服务器返回的 comments 数据
+    let evaluations = [];
+    
+    if (user.comments && typeof user.comments === 'object') {
+      // 将 comments 转换为 evaluations 格式
+      Object.keys(user.comments).forEach(commentId => {
+        const count = user.comments[commentId];
+        const commentText = commentsDefines[commentId] || `评论${commentId}`;
+        if (count > 0) {
+          evaluations.push({
+            type: commentText,
+            count: count,
+            commentId: commentId
+          });
+        }
+      });
+      
+      // 按数量降序排序
+      evaluations.sort((a, b) => b.count - a.count);
+    } else {
+      // 如果没有服务器数据，使用模拟数据作为降级方案
+      const myEvaluations = playerEvaluationsData[user.id] || [];
+      const evaluationsWithVotes = myEvaluations.filter(e => e.voters.length > 0);
+      evaluations = evaluationsWithVotes.sort((a, b) => b.voters.length - a.voters.length).map(e => ({
+        type: e.type,
+        count: e.voters.length,
+        voters: e.voters
+      }));
+    }
 
     this.setData({
-      evaluations: sortedEvaluations
+      evaluations: evaluations
     });
   },
 
@@ -159,8 +192,10 @@ Page({
         winPer: playerInfo.winPer ? Number(playerInfo.winPer) : 0, // 万分比格式
         winRate: winRate, // 百分比格式（用于显示）
         createTime: playerInfo.createTime || null,
-        // 评价相关设置
-        allowEvaluation: this.data.user.allowEvaluation !== undefined ? this.data.user.allowEvaluation : true,
+        // 评价相关设置（使用服务器返回的数据）
+        allowEvaluation: playerInfo.commentsSwitch !== undefined ? playerInfo.commentsSwitch : (this.data.user.allowEvaluation !== undefined ? this.data.user.allowEvaluation : true),
+        commentsSwitch: playerInfo.commentsSwitch !== undefined ? playerInfo.commentsSwitch : true,
+        comments: playerInfo.comments || {}, // 点评信息，key=评论定义Id，value=次数
         lastEvaluationSettingTime: this.data.user.lastEvaluationSettingTime || null
       };
 
@@ -222,29 +257,70 @@ Page({
   // 处理switch组件的change事件
   onToggleEvaluationSwitch: function (e) {
     const value = e.detail.value;
+    const currentValue = this.data.user.commentsSwitch !== undefined ? this.data.user.commentsSwitch : this.data.user.allowEvaluation;
+    
     if (this.canToggleEvaluation()) {
-      // 更新用户设置
-      const updatedUser = {
-        ...this.data.user,
-        allowEvaluation: value,
-        lastEvaluationSettingTime: new Date().toISOString()
-      };
-
-      this.setData({
-        user: updatedUser
+      // 显示加载提示
+      wx.showLoading({
+        title: '更新中...',
+        mask: true
       });
 
-      // 更新全局状态
-      app.globalData.userInfo = updatedUser;
+      // 调用服务器API更新评论开关
+      // StringValue 需要是字符串格式，将布尔值转换为字符串
+      UpdatePlayerCommentsSwitch(value ? 'true' : 'false')
+        .then((responseData) => {
+          wx.hideLoading();
+          
+          // 服务器返回更新后的玩家信息
+          const playerInfo = responseData.playerInfo || {};
+          
+          // 更新用户设置
+          const updatedUser = {
+            ...this.data.user,
+            allowEvaluation: value,
+            commentsSwitch: playerInfo.commentsSwitch !== undefined ? playerInfo.commentsSwitch : value,
+            comments: playerInfo.comments || this.data.user.comments || {},
+            lastEvaluationSettingTime: new Date().toISOString()
+          };
 
-      wx.showToast({
-        title: value ? '已开启评价功能' : '已关闭评价功能',
-        icon: 'success'
-      });
+          this.setData({
+            user: updatedUser
+          });
+
+          // 更新全局状态
+          app.globalData.userInfo = updatedUser;
+
+          // 更新评价数据（因为 comments 可能已更新）
+          this.updateEvaluations();
+
+          wx.showToast({
+            title: value ? '已开启评价功能' : '已关闭评价功能',
+            icon: 'success'
+          });
+        })
+        .catch((error) => {
+          wx.hideLoading();
+          console.error('更新评价设置失败:', error);
+          
+          // 如果更新失败，恢复原来的值
+          this.setData({
+            'user.commentsSwitch': currentValue,
+            'user.allowEvaluation': currentValue
+          });
+
+          wx.showModal({
+            title: '更新失败',
+            content: error.message || '网络错误，请稍后重试',
+            showCancel: false,
+            confirmText: '确定'
+          });
+        });
     } else {
       // 如果不能切换，恢复原来的值
       this.setData({
-        'user.allowEvaluation': !value
+        'user.commentsSwitch': currentValue,
+        'user.allowEvaluation': currentValue
       });
 
       wx.showToast({
@@ -273,7 +349,14 @@ Page({
 
   // 获取总评价数
   getTotalEvaluations: function () {
-    return this.data.evaluations.reduce((sum, e) => sum + e.voters.length, 0);
+    return this.data.evaluations.reduce((sum, e) => {
+      // 如果是从服务器返回的数据，使用 count 字段
+      if (e.count !== undefined) {
+        return sum + e.count;
+      }
+      // 如果是模拟数据，使用 voters.length
+      return sum + (e.voters ? e.voters.length : 0);
+    }, 0);
   },
 
   // 处理头像选择
@@ -307,7 +390,9 @@ Page({
         const updatedUser = {
           ...this.data.user,
           avatar: playerInfo.showIconUrl || avatarUrl,
-          name: playerInfo.showName || this.data.user.name
+          name: playerInfo.showName || this.data.user.name,
+          commentsSwitch: playerInfo.commentsSwitch !== undefined ? playerInfo.commentsSwitch : this.data.user.commentsSwitch,
+          comments: playerInfo.comments || this.data.user.comments || {}
         };
 
         this.setData({
@@ -406,7 +491,9 @@ Page({
         const updatedUser = {
           ...this.data.user,
           name: playerInfo.showName || newNickname,
-          avatar: playerInfo.showIconUrl || this.data.user.avatar
+          avatar: playerInfo.showIconUrl || this.data.user.avatar,
+          commentsSwitch: playerInfo.commentsSwitch !== undefined ? playerInfo.commentsSwitch : this.data.user.commentsSwitch,
+          comments: playerInfo.comments || this.data.user.comments || {}
         };
 
         this.setData({

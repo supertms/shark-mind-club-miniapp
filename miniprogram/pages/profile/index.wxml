@@ -68,17 +68,18 @@
         <view class="evaluations-list">
           <view
             wx:for="{{evaluations}}"
-            wx:key="type"
+            wx:key="{{item.commentId || item.type}}"
             class="evaluation-item"
           >
             <view class="evaluation-header">
               <text class="evaluation-type">{{item.type}}</text>
               <view class="evaluation-badge">
-                <text class="badge-text">{{item.voters.length}}人点赞</text>
+                <text class="badge-text">{{item.count || item.voters.length}}人点赞</text>
               </view>
             </view>
 
-            <view class="voters-list">
+            <!-- 如果有 voters 数据（模拟数据），显示投票者列表 -->
+            <view wx:if="{{item.voters && item.voters.length > 0}}" class="voters-list">
               <text
                 wx:for="{{item.voters}}"
                 wx:for-item="voter"
@@ -155,10 +156,10 @@
         <view class="setting-item">
           <text class="setting-label">允许评价</text>
           <switch
-            checked="{{user.allowEvaluation}}"
-            bindchange="onToggleEvaluationSwitch"
+            checked="{{user.commentsSwitch !== undefined ? user.commentsSwitch : user.allowEvaluation}}"
+            catchchange="onToggleEvaluationSwitch"
             disabled="{{!canToggleEvaluation()}}"
-            data-value="{{!user.allowEvaluation}}"
+            data-value="{{!(user.commentsSwitch !== undefined ? user.commentsSwitch : user.allowEvaluation)}}"
           />
         </view>
 
@@ -167,7 +168,7 @@
         </view>
 
         <view class="setting-status">
-          <text>当前状态：{{user.allowEvaluation ? '已开启' : '已关闭'}}</text>
+          <text>当前状态：{{(user.commentsSwitch !== undefined ? user.commentsSwitch : user.allowEvaluation) ? '已开启' : '已关闭'}}</text>
         </view>
       </view>
     </view>

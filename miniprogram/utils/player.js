@@ -94,8 +94,36 @@ function UpdatePlayerNickname(nickname) {
   return sendRequest(cmd, dataString);
 }
 
+function UpdatePlayerCommentsSwitch(commentSwitch) {
+  // 构建请求数据（C2SUserEdit: editType=3表示修改是否允许评论）
+  const requestData = {
+    editType: 3,
+    StringValue: commentSwitch
+  };
+
+  // 将请求数据转换为JSON字符串
+  const dataString = JSON.stringify(requestData);
+  const cmd = '103';
+
+  // 打印请求信息（调试用）
+  console.log('更新玩家评论开关:', {
+    url: API_BASE_URL,
+    method: 'PUT',
+    contentType: 'application/x-www-form-urlencoded',
+    debugMode: IS_DEBUG_MODE,
+    formData: {
+      cmd: cmd,
+      data: dataString
+    },
+    commentSwitch: commentSwitch
+  });
+
+  return sendRequest(cmd, dataString);
+}
+
 module.exports = {
   GetPlayerInfo,
   UpdatePlayerAvatar,
-  UpdatePlayerNickname
+  UpdatePlayerNickname,
+  UpdatePlayerCommentsSwitch
 };
