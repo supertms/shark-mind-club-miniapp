@@ -8,6 +8,7 @@ const {
   winRateRankingData
 } = require('../../data/mockData');
 const { requestRankList, convertRankListData } = require('../../utils/api');
+const { CommentPlayer } = require('../../utils/comment');
 
 Page({
   data: {
@@ -35,11 +36,9 @@ Page({
     evaluationPlayer: null, // 当前评价的玩家信息
     evaluationTypes: [], // 评价类型列表
     likedCommentType: null, // 已点赞的评论类型
-    likedCommentTypeName: null, // 已点赞的评论类型名称
-    showConfirmDialog: false, // 确认点赞对话框
+    likedCommentTypeName: '', // 已点赞的评论类型名称
     showAlreadyLikedDialog: false, // 已点赞提示对话框
-    pendingLikeType: null, // 待确认的点赞类型
-    pendingLikeTypeName: null, // 待确认的点赞类型名称
+    isSubmittingLike: false, // 是否正在提交点赞
 
     // 缓存数据
     cachedRankings: {
@@ -363,8 +362,7 @@ Page({
     
     // 获取已点赞的类型名称（如果有）
     const commentsDefines = app.globalData.commentsDefines || {};
-    const likedCommentTypeName = this.data.likedCommentType ? commentsDefines[this.data.likedCommentType] : null;
-    const pendingLikeTypeName = this.data.pendingLikeType ? commentsDefines[this.data.pendingLikeType] : null;
+    const likedCommentTypeName = this.data.likedCommentType ? (commentsDefines[this.data.likedCommentType] || '') : '';
 
     // 打开评价模态框
     this.setData({
@@ -372,8 +370,7 @@ Page({
       evaluationPlayer: player,
       evaluationTypes: evaluationTypes,
       likedCommentType: null, // 重置点赞状态，实际应该从服务器获取
-      likedCommentTypeName: likedCommentTypeName,
-      pendingLikeTypeName: pendingLikeTypeName
+      likedCommentTypeName: likedCommentTypeName || ''
     });
   },
 
@@ -382,16 +379,19 @@ Page({
     this.setData({
       showEvaluationModal: false,
       evaluationPlayer: null,
-      showConfirmDialog: false,
-      showAlreadyLikedDialog: false,
-      pendingLikeType: null
+      showAlreadyLikedDialog: false
     });
   },
 
-  // 处理点赞
+  // 处理点赞（直接发送协议）
   onLikeComment: function (e) {
     const commentType = e.currentTarget.dataset.type;
-    const { likedCommentType } = this.data;
+    const { likedCommentType, evaluationPlayer, isSubmittingLike } = this.data;
+    
+    // 防止重复提交
+    if (isSubmittingLike) {
+      return;
+    }
     
     // 如果已经点赞过，显示提示对话框
     if (likedCommentType) {
@@ -401,62 +401,81 @@ Page({
       return;
     }
     
-    // 获取评论类型名称
-    const commentsDefines = app.globalData.commentsDefines || {};
-    const commentTypeName = commentsDefines[commentType] || `评论${commentType}`;
-    
-    // 显示确认对话框
-    this.setData({
-      pendingLikeType: commentType,
-      pendingLikeTypeName: commentTypeName,
-      showConfirmDialog: true
-    });
-  },
-
-  // 确认点赞
-  onConfirmLike: function () {
-    const { pendingLikeType, evaluationPlayer } = this.data;
-    if (pendingLikeType) {
-      // TODO: 调用服务器API提交点赞
-      // 这里暂时只更新本地状态
-      const commentsDefines = app.globalData.commentsDefines || {};
-      const likedCommentTypeName = commentsDefines[pendingLikeType] || `评论${pendingLikeType}`;
-      
-      // 更新评价类型列表，增加点赞数
-      const updatedTypes = this.data.evaluationTypes.map(type => {
-        if (type.id === pendingLikeType) {
-          return {
-            ...type,
-            count: type.count + 1,
-            hasVotes: true
-          };
-        }
-        return type;
-      });
-      
-      this.setData({
-        likedCommentType: pendingLikeType,
-        likedCommentTypeName: likedCommentTypeName,
-        showConfirmDialog: false,
-        pendingLikeType: null,
-        pendingLikeTypeName: null,
-        evaluationTypes: updatedTypes
-      });
-      
+    if (!evaluationPlayer || !evaluationPlayer.id) {
       wx.showToast({
-        title: '点赞成功',
-        icon: 'success',
+        title: '参数错误',
+        icon: 'none',
         duration: 2000
       });
+      return;
     }
-  },
-
-  // 取消点赞确认
-  onCancelLike: function () {
+    
+    // 设置提交状态
     this.setData({
-      showConfirmDialog: false,
-      pendingLikeType: null
+      isSubmittingLike: true
     });
+    
+    // 显示加载提示
+    wx.showLoading({
+      title: '提交中...',
+      mask: true
+    });
+    
+    // 直接调用服务器API提交点赞
+    CommentPlayer(evaluationPlayer.id, commentType)
+      .then((responseData) => {
+        wx.hideLoading();
+        
+        // 重置提交状态
+        this.setData({
+          isSubmittingLike: false
+        });
+        
+        // 获取评论类型名称
+        const commentsDefines = app.globalData.commentsDefines || {};
+        const likedCommentTypeName = commentsDefines[commentType] || `评论${commentType}` || '';
+        
+        // 更新评价类型列表，增加点赞数
+        const updatedTypes = this.data.evaluationTypes.map(type => {
+          if (type.id === commentType) {
+            return {
+              ...type,
+              count: type.count + 1,
+              hasVotes: true
+            };
+          }
+          return type;
+        });
+        
+        // 更新状态
+        this.setData({
+          likedCommentType: commentType,
+          likedCommentTypeName: likedCommentTypeName || '',
+          evaluationTypes: updatedTypes
+        });
+        
+        wx.showToast({
+          title: '点赞成功',
+          icon: 'success',
+          duration: 2000
+        });
+      })
+      .catch((error) => {
+        wx.hideLoading();
+        console.error('点赞失败:', error);
+        
+        // 重置提交状态
+        this.setData({
+          isSubmittingLike: false
+        });
+        
+        wx.showModal({
+          title: '点赞失败',
+          content: error.message || '网络错误，请稍后重试',
+          showCancel: false,
+          confirmText: '确定'
+        });
+      });
   },
 
   // 关闭已点赞提示对话框

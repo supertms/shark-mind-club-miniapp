@@ -2,8 +2,5 @@
   "navigationBarTitleText": "排行榜",
   "navigationBarBackgroundColor": "#000000",
   "navigationBarTextStyle": "white",
-  "backgroundColor": "#000000",
-  "usingComponents": {
-    "comment-confirm-dialog": "../../components/comment-confirm-dialog/index"
-  }
+  "backgroundColor": "#000000"
 }

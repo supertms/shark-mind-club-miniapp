@@ -162,6 +162,10 @@
   font-size: 28rpx;
   font-weight: bold;
   border: none;
+  text-align: center;
+  cursor: pointer;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .comment-confirm-dialog-btn.cancel {

@@ -1,5 +1,5 @@
 <!--components/comment-confirm-dialog/index.wxml-->
-<view wx:if="{{show}}" class="comment-confirm-dialog-overlay" bindtap="onCancel">
+<view wx:if="{{show}}" class="comment-confirm-dialog-overlay">
   <view class="comment-confirm-dialog-content" catchtap="stopPropagation">
     <view class="comment-confirm-dialog-header">
       <view class="comment-confirm-dialog-icon">
@@ -44,12 +44,12 @@
 
     <!-- 按钮 -->
     <view class="comment-confirm-dialog-buttons">
-      <button class="comment-confirm-dialog-btn cancel" bindtap="onCancel">
+      <view class="comment-confirm-dialog-btn cancel" catchtap="onCancel">
         <text>取消</text>
-      </button>
-      <button class="comment-confirm-dialog-btn confirm" bindtap="onConfirm">
+      </view>
+      <view class="comment-confirm-dialog-btn confirm" catchtap="onConfirm">
         <text>确认点赞</text>
-      </button>
+      </view>
     </view>
   </view>
 </view>

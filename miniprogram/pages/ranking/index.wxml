@@ -373,15 +373,6 @@
       </scroll-view>
     </view>
 
-    <!-- 确认点赞对话框 -->
-    <comment-confirm-dialog
-      show="{{showConfirmDialog}}"
-      playerName="{{evaluationPlayer.name}}"
-      commentTypeName="{{pendingLikeTypeName}}"
-      bind:cancel="onCancelLike"
-      bind:confirm="onConfirmLike"
-    />
-
     <!-- 已经点赞提示对话框 -->
     <view wx:if="{{showAlreadyLikedDialog}}" class="evaluation-dialog-overlay" bindtap="onCloseAlreadyLikedDialog">
       <view class="evaluation-dialog-content" catchtap="">
