@@ -1,0 +1,55 @@
+<!--components/comment-confirm-dialog/index.wxml-->
+<view wx:if="{{show}}" class="comment-confirm-dialog-overlay" bindtap="onCancel">
+  <view class="comment-confirm-dialog-content" catchtap="stopPropagation">
+    <view class="comment-confirm-dialog-header">
+      <view class="comment-confirm-dialog-icon">
+        <text class="like-icon-large">👍</text>
+      </view>
+      <text class="comment-confirm-dialog-title">确认点赞</text>
+      <text class="comment-confirm-dialog-subtitle">
+        为 <text class="highlight">{{playerName}}</text> 的 
+        <text class="highlight-yellow">{{commentTypeName}}</text> 
+        风格点赞
+      </text>
+    </view>
+
+    <!-- 重要提示 -->
+    <view class="comment-confirm-dialog-warning">
+      <view class="warning-header">
+        <text class="warning-icon">⚠️</text>
+        <text class="warning-title">重要提示</text>
+      </view>
+      <view class="warning-content">
+        <view class="warning-item">
+          <text class="warning-number">1.</text>
+          <text class="warning-text">
+            每个人只能为<text class="highlight-white">同一个玩家点赞一次</text>，
+            <text class="highlight-pink">点赞后不可撤销</text>
+          </text>
+        </view>
+        <view class="warning-item">
+          <text class="warning-number">2.</text>
+          <text class="warning-text">
+            必须<text class="highlight-white">与该玩家有过同场比赛经历</text>才可为对方点赞
+          </text>
+        </view>
+        <view class="warning-item">
+          <text class="warning-number">3.</text>
+          <text class="warning-text">
+            您的点赞评价会<text class="highlight-white">展示给所有玩家观看</text>，请您慎重决定
+          </text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 按钮 -->
+    <view class="comment-confirm-dialog-buttons">
+      <button class="comment-confirm-dialog-btn cancel" bindtap="onCancel">
+        <text>取消</text>
+      </button>
+      <button class="comment-confirm-dialog-btn confirm" bindtap="onConfirm">
+        <text>确认点赞</text>
+      </button>
+    </view>
+  </view>
+</view>

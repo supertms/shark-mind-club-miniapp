@@ -30,6 +30,17 @@ Page({
     // UI状态
     loading: false,
 
+    // 评价模态框状态
+    showEvaluationModal: false,
+    evaluationPlayer: null, // 当前评价的玩家信息
+    evaluationTypes: [], // 评价类型列表
+    likedCommentType: null, // 已点赞的评论类型
+    likedCommentTypeName: null, // 已点赞的评论类型名称
+    showConfirmDialog: false, // 确认点赞对话框
+    showAlreadyLikedDialog: false, // 已点赞提示对话框
+    pendingLikeType: null, // 待确认的点赞类型
+    pendingLikeTypeName: null, // 待确认的点赞类型名称
+
     // 缓存数据
     cachedRankings: {
       week: [],
@@ -331,28 +342,127 @@ Page({
   // 选择玩家进行评价
   onSelectPlayer: function (e) {
     const player = e.currentTarget.dataset.player;
-    if (this.isEvaluationAllowed(player.id) && this.data.isLoggedIn) {
-      // 获取完整的评价数据
-      const evaluations = playerEvaluationsData[player.id] || [];
-      const selectedPlayerWithEvaluations = {
-        ...player,
-        evaluations: evaluations
-      };
-      this.setData({
-        selectedPlayer: selectedPlayerWithEvaluations
-      });
-    } else if (!this.data.isLoggedIn) {
+    if (!this.data.isLoggedIn) {
       wx.showToast({
         title: '请先登录',
         icon: 'none'
       });
+      return;
     }
+    
+    if (!this.isEvaluationAllowed(player.id)) {
+      wx.showToast({
+        title: '该玩家不允许评价',
+        icon: 'none'
+      });
+      return;
+    }
+
+    // 获取评价类型列表
+    const evaluationTypes = this.getEvaluationTypesWithCounts(player);
+    
+    // 获取已点赞的类型名称（如果有）
+    const commentsDefines = app.globalData.commentsDefines || {};
+    const likedCommentTypeName = this.data.likedCommentType ? commentsDefines[this.data.likedCommentType] : null;
+    const pendingLikeTypeName = this.data.pendingLikeType ? commentsDefines[this.data.pendingLikeType] : null;
+
+    // 打开评价模态框
+    this.setData({
+      showEvaluationModal: true,
+      evaluationPlayer: player,
+      evaluationTypes: evaluationTypes,
+      likedCommentType: null, // 重置点赞状态，实际应该从服务器获取
+      likedCommentTypeName: likedCommentTypeName,
+      pendingLikeTypeName: pendingLikeTypeName
+    });
   },
 
   // 关闭玩家评价模态框
   onClosePlayerEvaluation: function () {
     this.setData({
-      selectedPlayer: null
+      showEvaluationModal: false,
+      evaluationPlayer: null,
+      showConfirmDialog: false,
+      showAlreadyLikedDialog: false,
+      pendingLikeType: null
+    });
+  },
+
+  // 处理点赞
+  onLikeComment: function (e) {
+    const commentType = e.currentTarget.dataset.type;
+    const { likedCommentType } = this.data;
+    
+    // 如果已经点赞过，显示提示对话框
+    if (likedCommentType) {
+      this.setData({
+        showAlreadyLikedDialog: true
+      });
+      return;
+    }
+    
+    // 获取评论类型名称
+    const commentsDefines = app.globalData.commentsDefines || {};
+    const commentTypeName = commentsDefines[commentType] || `评论${commentType}`;
+    
+    // 显示确认对话框
+    this.setData({
+      pendingLikeType: commentType,
+      pendingLikeTypeName: commentTypeName,
+      showConfirmDialog: true
+    });
+  },
+
+  // 确认点赞
+  onConfirmLike: function () {
+    const { pendingLikeType, evaluationPlayer } = this.data;
+    if (pendingLikeType) {
+      // TODO: 调用服务器API提交点赞
+      // 这里暂时只更新本地状态
+      const commentsDefines = app.globalData.commentsDefines || {};
+      const likedCommentTypeName = commentsDefines[pendingLikeType] || `评论${pendingLikeType}`;
+      
+      // 更新评价类型列表，增加点赞数
+      const updatedTypes = this.data.evaluationTypes.map(type => {
+        if (type.id === pendingLikeType) {
+          return {
+            ...type,
+            count: type.count + 1,
+            hasVotes: true
+          };
+        }
+        return type;
+      });
+      
+      this.setData({
+        likedCommentType: pendingLikeType,
+        likedCommentTypeName: likedCommentTypeName,
+        showConfirmDialog: false,
+        pendingLikeType: null,
+        pendingLikeTypeName: null,
+        evaluationTypes: updatedTypes
+      });
+      
+      wx.showToast({
+        title: '点赞成功',
+        icon: 'success',
+        duration: 2000
+      });
+    }
+  },
+
+  // 取消点赞确认
+  onCancelLike: function () {
+    this.setData({
+      showConfirmDialog: false,
+      pendingLikeType: null
+    });
+  },
+
+  // 关闭已点赞提示对话框
+  onCloseAlreadyLikedDialog: function () {
+    this.setData({
+      showAlreadyLikedDialog: false
     });
   },
 
@@ -371,5 +481,39 @@ Page({
       return 'rank-medal';
     }
     return 'rank-badge';
+  },
+
+  // 获取所有评价类型列表（从 commentsDefines 获取），并包含玩家的点赞数
+  getEvaluationTypesWithCounts: function (player) {
+    const commentsDefines = app.globalData.commentsDefines || {};
+    const types = [];
+    
+    // 将 commentsDefines 转换为数组
+    Object.keys(commentsDefines).forEach(key => {
+      const count = this.getCommentCount(player, key);
+      types.push({
+        id: key,
+        name: commentsDefines[key],
+        count: count,
+        hasVotes: count > 0
+      });
+    });
+    
+    // 按点赞数降序排序（有评价的放前面）
+    types.sort((a, b) => {
+      if (a.hasVotes && !b.hasVotes) return -1;
+      if (!a.hasVotes && b.hasVotes) return 1;
+      return b.count - a.count;
+    });
+    
+    return types;
+  },
+
+  // 获取玩家某个评价类型的点赞数
+  getCommentCount: function (player, commentId) {
+    if (!player || !player.comments) {
+      return 0;
+    }
+    return player.comments[commentId] || 0;
   }
 });

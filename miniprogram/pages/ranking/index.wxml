@@ -312,24 +312,116 @@
   </view>
 
   <!-- 玩家评价模态框 -->
-  <view wx:if="{{selectedPlayer}}" class="modal-overlay" bindtap="onClosePlayerEvaluation">
-    <view class="modal-content" catchtap="">
-      <view class="modal-header">
-        <text class="modal-title">{{selectedPlayer.name}} 的玩家评价</text>
-        <text class="modal-close" bindtap="onClosePlayerEvaluation">✕</text>
+  <view wx:if="{{showEvaluationModal}}" class="evaluation-modal-overlay" bindtap="onClosePlayerEvaluation">
+    <view class="evaluation-modal-content" catchtap="">
+      <!-- Header -->
+      <view class="evaluation-modal-header">
+        <!-- Close button -->
+        <text class="evaluation-modal-close" bindtap="onClosePlayerEvaluation">✕</text>
+        
+        <!-- Player Info -->
+        <view class="evaluation-player-info">
+          <!-- Large Avatar -->
+          <view class="evaluation-avatar-large">
+            <text class="evaluation-avatar-text">{{evaluationPlayer.name[0]}}</text>
+          </view>
+          
+          <!-- Player Name -->
+          <text class="evaluation-player-name">{{evaluationPlayer.name}}</text>
+          
+          <!-- Subtitle -->
+          <text wx:if="{{isLoggedIn}}" class="evaluation-subtitle">点击 👍 为TA的风格点赞</text>
+        </view>
       </view>
-      <scroll-view class="modal-body" scroll-y="true">
-        <view wx:for="{{selectedPlayer.evaluations}}" wx:for-item="evaluation" wx:key="type" class="evaluation-item">
-          <text class="evaluation-type">{{evaluation.type}}</text>
-          <text class="evaluation-count">{{evaluation.voters.length}}人评价</text>
-          <view class="voters-list">
-            <text wx:for="{{evaluation.voters}}" wx:for-item="voter" wx:key="id" class="voter-name">{{voter.name}}</text>
+
+      <!-- Content -->
+      <scroll-view class="evaluation-modal-body" scroll-y="true">
+        <view class="evaluation-types-list">
+          <view 
+            wx:for="{{evaluationTypes}}" 
+            wx:for-item="type" 
+            wx:key="id"
+            wx:if="{{isLoggedIn || type.hasVotes}}"
+            class="evaluation-type-item {{type.hasVotes ? 'has-votes' : ''}} {{likedCommentType === type.id ? 'liked' : ''}}"
+          >
+            <view class="evaluation-type-header">
+              <view class="evaluation-type-left">
+                <text class="evaluation-type-name">{{type.name}}</text>
+                <view wx:if="{{type.count > 0 || likedCommentType === type.id}}" class="evaluation-count-badge">
+                  <text>{{type.count + (likedCommentType === type.id ? 1 : 0)}}</text>
+                </view>
+              </view>
+              <!-- 点赞按钮 -->
+              <view wx:if="{{isLoggedIn}}" class="evaluation-like-btn-wrapper">
+                <button 
+                  class="evaluation-like-btn {{likedCommentType === type.id ? 'liked' : ''}}"
+                  bindtap="onLikeComment"
+                  data-type="{{type.id}}"
+                >
+                  <text class="like-icon">👍</text>
+                  <text class="like-text">{{likedCommentType === type.id ? '已点赞' : '点赞'}}</text>
+                </button>
+              </view>
+            </view>
+            
+            <!-- 暂无评价提示 -->
+            <view wx:if="{{!type.hasVotes && likedCommentType !== type.id}}" class="evaluation-empty-hint">
+              <text>暂无评价，快来第一个点赞吧！</text>
+            </view>
           </view>
         </view>
-        <view wx:if="{{!selectedPlayer.evaluations || selectedPlayer.evaluations.length === 0}}" class="no-evaluations">
-          <text>暂无评价</text>
-        </view>
       </scroll-view>
+    </view>
+
+    <!-- 确认点赞对话框 -->
+    <comment-confirm-dialog
+      show="{{showConfirmDialog}}"
+      playerName="{{evaluationPlayer.name}}"
+      commentTypeName="{{pendingLikeTypeName}}"
+      bind:cancel="onCancelLike"
+      bind:confirm="onConfirmLike"
+    />
+
+    <!-- 已经点赞提示对话框 -->
+    <view wx:if="{{showAlreadyLikedDialog}}" class="evaluation-dialog-overlay" bindtap="onCloseAlreadyLikedDialog">
+      <view class="evaluation-dialog-content" catchtap="">
+        <view class="evaluation-dialog-header">
+          <view class="evaluation-dialog-icon error">
+            <text class="error-icon">🚫</text>
+          </view>
+          <text class="evaluation-dialog-title">无法点赞</text>
+          <text class="evaluation-dialog-subtitle">
+            您已经为 <text class="highlight">{{evaluationPlayer.name}}</text> 点赞过了
+          </text>
+        </view>
+
+        <!-- 已点赞信息 -->
+        <view class="evaluation-dialog-info">
+          <text class="info-text">您已经为TA的这个风格点赞：</text>
+          <view class="liked-type-display">
+            <text class="liked-type-name">{{likedCommentTypeName}}</text>
+            <text class="like-icon">👍</text>
+          </view>
+        </view>
+
+        <!-- 提示信息 -->
+        <view class="evaluation-dialog-tip">
+          <view class="tip-header">
+            <text class="tip-icon">ℹ️</text>
+            <text class="tip-title">温馨提示</text>
+          </view>
+          <text class="tip-text">
+            每个人只能为<text class="highlight-white">同一个玩家点赞一次</text>，
+            且<text class="highlight-pink">点赞后不可撤销</text>。
+            请勿重复点赞。
+          </text>
+        </view>
+
+        <!-- 按钮 -->
+        <button class="evaluation-dialog-btn confirm" bindtap="onCloseAlreadyLikedDialog">
+          <text>我知道了</text>
+        </button>
+      </view>
     </view>
   </view>
 </view>
