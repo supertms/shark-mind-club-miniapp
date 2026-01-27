@@ -71,6 +71,16 @@
 
         <!-- Quick Features -->
         <view class="quick-features">
+          <!-- 赛事桌列表 -->
+          <view class="feature-item" bindtap="onNavigateToBattle">
+            <view class="feature-icon">🎯</view>
+            <view class="feature-info">
+              <text class="feature-title">赛事桌列表</text>
+              <text class="feature-subtitle">加入比赛</text>
+            </view>
+            <text class="feature-arrow">→</text>
+          </view>
+
           <!-- 点餐 -->
           <view class="feature-item" bindtap="onNavigateToOrder">
             <view class="feature-icon">🍽️</view>

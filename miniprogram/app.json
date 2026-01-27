@@ -5,7 +5,8 @@
     "pages/profile/index",
     "pages/order/index",
     "pages/pickup/index",
-    "pages/location-guide/index"
+    "pages/location-guide/index",
+    "pages/battle/index"
   ],
   "lazyCodeLoading": "requiredComponents",
   "window": {

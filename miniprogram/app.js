@@ -25,10 +25,19 @@ App({
 
   // 初始化全局数据
   initGlobalData: function () {
+    // 尝试从本地存储恢复sessionId
+    let sessionId = '';
+    try {
+      sessionId = wx.getStorageSync('sessionId') || '';
+    } catch (e) {
+      console.error('读取sessionId失败:', e);
+    }
+
     this.globalData = {
       // 用户相关
       userInfo: mockUser,
       isLoggedIn: false,
+      sessionId: sessionId, // 服务器登录令牌
 
       // 购物车相关
       cart: [],
@@ -37,7 +46,10 @@ App({
       ongoingOrders: [],
 
       // 其他状态
-      currentPage: 'home'
+      currentPage: 'home',
+      
+      // 评论定义
+      commentsDefines: {}
     };
   },
 

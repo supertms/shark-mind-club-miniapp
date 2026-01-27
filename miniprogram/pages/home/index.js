@@ -127,6 +127,13 @@ Page({
   },
 
   // 导航到订单页面
+  // 导航到赛事桌列表
+  onNavigateToBattle: function () {
+    wx.navigateTo({
+      url: '/pages/battle/index'
+    });
+  },
+
   onNavigateToOrder: function () {
     wx.navigateTo({
       url: '/pages/order/index'

@@ -67,6 +67,7 @@ message Notice {
   int32 type = 1; //公告类型, 0=大厅公告
   string title = 2; //标题
   string content = 3; //内容
+  string url = 4; //外部url
 }
 
 // 协议对:获取公共列表,cmd=NOTICE_GET_LIST,无需登录

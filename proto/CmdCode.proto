@@ -17,4 +17,7 @@ enum CmdCode
   DEFINE_GET_LIST = 106; //获取各种定义列表:评论定义/
   COMMENT = 107; //点评别人
 
+  BATTLE_LIST = 200; //房间列表
+  BATTLE_JOIN = 201; //加入房间
+  BATTLE_EXIT = 202; //离开当前未结算的房间
 }

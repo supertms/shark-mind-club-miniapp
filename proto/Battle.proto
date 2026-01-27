@@ -1,0 +1,61 @@
+syntax = "proto3";
+
+option csharp_namespace = "PBNS";
+option java_package = "net.good321.proto";
+option java_outer_classname = "BattleMsg";
+
+// 比赛类型枚举定义
+enum BattleTypeEnum {
+  GENERAL = 0; //常规赛,玩家自主上桌
+  SEASON = 2;//赛季决赛,荷官指定上座
+}
+
+// 比赛状态枚举定义
+enum BattleStatusEnum {
+  PLAYING = 0; //进行中
+  END = 1;//已结束,即历史记录,只能查看自己参加的
+  DELETE = 2;//已作废,服务器内外部用
+}
+
+message Room {
+  int64 id = 1;  //id
+  int32 battleTypeValue = 2;//比赛类型
+  int32 statusValue = 3; //状态,0=比赛中,1=已结束
+  string name = 4; // 赛事名称
+  string info = 5; // 赛事描述
+  string startTime = 6;//开赛时间,格式:yyyy-MM-dd HH:mm:ss
+  bool canJoin = 7;//当前是否可加入
+  repeated RoomPlayer players = 8;//玩家列表
+}
+
+message RoomPlayer {
+  int64 uid = 1;  //玩家id
+  string name = 2; // 名称
+  int32 status = 3; //状态,0=待荷官确认,1=已确认
+  int32 rankIndex = 4; //本场排名,完赛后才有
+  int32 score = 5; //获得积分
+}
+
+//协议对:获取房间信息,cmd=BATTLE_LIST
+message C2SRoomGetList {
+  int32 statusValue = 1;  //类型
+}
+message S2CRoomGetList {
+  repeated Room rooms = 1; //列表,只返回最近n条
+}
+
+//协议对:加入房间,cmd=BATTLE_JOIN
+message C2SRoomJoin {
+  int64 id = 1;  //房间id
+}
+message S2CRoomJoin {
+  int32 rs = 1; //成功=0,其他是失败(失败应该是通过通用消息返回了,不会到这里)
+}
+
+//协议对:离开当前未结算的房间,cmd=BATTLE_EXIT
+message C2SRoomExit {
+  int64 id = 1;  //房间id
+}
+message S2CRoomExit {
+  int32 rs = 1; //成功=0,其他是失败(失败应该是通过通用消息返回了,不会到这里)
+}
